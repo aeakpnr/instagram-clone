@@ -1,0 +1,186 @@
+<!--
+
+
+<div class="d-flex justify-content-center align-items-center mt-5">
+  <form class="form-signin d-flex justify-content-center align-items-center flex-column" >
+  <img class="my-2" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+  <h1 class="h3 my-2 font-weight-normal">Please sign in</h1>
+  <label for="inputEmail" class=" my-2 sr-only">Email address</label>
+  <input type="email" id="inputEmail" class="form-control my-2" placeholder="Email address" required="" autofocus="">
+  <label for="inputPassword" class="my-2 sr-only">Password</label>
+  <input type="password" id="inputPassword" class="form-control my-2" placeholder="Password" required="">
+  <div class="checkbox mb-3">
+    <label class="my-2">
+      <input type="checkbox" value="remember-me"> Remember me
+    </label>
+  </div>
+  <button class="btn btn-lg btn-primary btn-block " type="submit">Sign in</button>
+  <p class="mt-5 mb-3 text-muted">© 2017-2018</p>
+</form>
+</div>
+ -->
+
+<div class="d-flex justify-content-center">
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button
+        class="nav-link active"
+        id="home-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#home-tab-pane"
+        type="button"
+        role="tab"
+        aria-controls="home-tab-pane"
+        aria-selected="true"
+      >
+        Login
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button
+        class="nav-link"
+        id="profile-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#profile-tab-pane"
+        type="button"
+        role="tab"
+        aria-controls="profile-tab-pane"
+        aria-selected="false"
+      >
+        Sing Up
+      </button>
+    </li>
+  </ul>
+</div>
+
+<div class="tab-content" id="myTabContent" style="width: 100%">
+  <div
+    class="tab-pane fade show active"
+    id="home-tab-pane"
+    role="tabpanel"
+    aria-labelledby="home-tab"
+    tabindex="0"
+  >
+    <div class="d-flex justify-content-center align-items-center mt-5">
+      <form
+        class="form-signin d-flex justify-content-center align-items-center flex-column"
+        [formGroup]="singinForm"
+        (ngSubmit)="singinSubmit()"
+      >
+        <img
+          class="my-2"
+          src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg"
+          alt=""
+          width="72"
+          height="72"
+        />
+        <h1 class="h3 my-2 font-weight-normal">Please Login</h1>
+        <label for="inputEmail" class="my-2 sr-only">Email address</label>
+        <input
+          type="email"
+          id="inputEmail"
+          class="form-control my-2"
+          placeholder="Email address"
+          required=""
+          autofocus=""
+          formControlName="email"
+        />
+        <label for="inputPassword" class="my-2 sr-only">Password</label>
+        <input
+          type="password"
+          id="inputPassword"
+          class="form-control my-2"
+          placeholder="Password"
+          required=""
+          formControlName="password"
+        />
+        <div class="checkbox mb-3">
+          <label class="my-2">
+            <input type="checkbox" value="remember-me" /> Remember me
+          </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">
+          Sign in
+        </button>
+        <p class="mt-5 mb-3 text-muted">© 2017-2018</p>
+      </form>
+    </div>
+  </div>
+  <div
+    class="tab-pane fade"
+    id="profile-tab-pane"
+    role="tabpanel"
+    aria-labelledby="profile-tab"
+    tabindex="0"
+  >
+    <div class="d-flex justify-content-center align-items-center mt-5">
+      <form
+        class="form-signin d-flex justify-content-center align-items-center flex-column"
+        style="width: 50%"
+        [formGroup]="singupForm"
+        (ngSubmit)="singupSubmit()"
+      >
+        <img
+          class="my-2"
+          src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg"
+          alt=""
+          width="72"
+          height="72"
+        />
+        <h1 class="h3 my-2 font-weight-normal">Please sign in</h1>
+        <div
+          class="d-flex justify-content-end align-items-center"
+          style="width: 100%"
+        >
+          <label for="name" class="my-2 sr-only">İsim Soyisim:</label>
+          <input
+            type="text"
+            id="name"
+            class="form-control my-2 ms-3"
+            style="width: 40rem"
+            placeholder="İsim Soyisim"
+            required=""
+            autofocus=""
+            formControlName="name"
+          />
+        </div>
+        <div
+          class="d-flex justify-content-end align-items-center"
+          style="width: 100%"
+        >
+          <label for="email" class="my-2 sr-only">Email:</label>
+          <input
+            type="email"
+            id="email"
+            class="form-control my-2 ms-3"
+            style="width: 40rem"
+            placeholder="Email address"
+            required=""
+            autofocus=""
+            formControlName="email"
+          />
+        </div>
+        <div
+          class="d-flex justify-content-end align-items-center"
+          style="width: 100%"
+        >
+          <label for="password" class="my-2 sr-only">Password:</label>
+          <input
+            type="password"
+            id="password"
+            class="form-control my-2 ms-3"
+            style="width: 40rem"
+            placeholder="Password"
+            required=""
+            formControlName="password"
+          />
+        </div>
+
+        <button class="btn btn-lg btn-primary btn-block" (click)="singinSubmit()" type="submit">
+          Sign Up
+        </button>
+        <p class="mt-5 mb-3 text-muted">© 2017-2018</p>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "instagram-clone-2b700": {
+      "hosting": {
+        "instagram-clone": [
+          "instagram-clone-2b700"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "instagram-clone-2b700"
+  }
+}
