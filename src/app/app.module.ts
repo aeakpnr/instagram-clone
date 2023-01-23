@@ -14,12 +14,21 @@ import { HttpClientModule } from '@angular/common/http';
 import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 import { AuthComponent } from './auth/auth.component';
 import { HomeComponent } from './home/home.component';
+import { SidebarComponent } from './home/sidebar/sidebar.component';
+import { HomePageComponent } from './home/home-page/home-page.component';
+import { HomeRoutingModule } from './home/home-routing.module';
+
+
 
 @NgModule({
   declarations: [
     AppComponent,
     AuthComponent,
-    HomeComponent
+    HomeComponent,
+    SidebarComponent,
+    HomePageComponent,
+
+
   ],
   imports: [
     BrowserModule,
@@ -27,6 +36,7 @@ import { HomeComponent } from './home/home.component';
     ReactiveFormsModule,
     HttpClientModule,
     FirebaseAppModule,
+    HomeRoutingModule,
 
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),

@@ -30,7 +30,7 @@ export class AuthService {
       .signInWithEmailAndPassword(email, password)
       .then((res) => {
         localStorage.setItem('user', JSON.stringify(res.user))
-        this.router.navigate(['home'])
+        this.router.navigate([''])
       });
   }
   async singinGmailService() {
@@ -40,8 +40,8 @@ export class AuthService {
   }
   async singoutService(){
     return await this.firebaseAuth.signOut().then((res)=> {
-      localStorage.clear()
-      this.router.navigate([''])
+      localStorage.clear();
+
     })
   }
 }
