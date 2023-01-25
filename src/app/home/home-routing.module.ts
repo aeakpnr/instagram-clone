@@ -4,6 +4,9 @@ import { HomeComponent } from '../home/home.component';
 import { AuthComponent } from '../auth/auth.component';
 import { AuthGuard } from '../guard/auth.guard';
 import { HomePageComponent } from './home-page/home-page.component';
+import { MessagesComponent } from './messages/messages.component';
+import { DiscoverComponent } from './discover/discover.component';
+import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [
   {
@@ -12,8 +15,20 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       {
-        path: 'main',
+        path: '',
         component: HomePageComponent,
+      },
+      {
+        path: 'messages',
+        component: MessagesComponent,
+      },
+      {
+        path: 'discover',
+        component: DiscoverComponent,
+      },
+      {
+        path: 'profile',
+        component: ProfileComponent,
       },
     ],
   }, //children eklenecek

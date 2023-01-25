@@ -1,1 +1,75 @@
-<p>home-page works!</p>
+<div
+  class="d-flex flex-column align-items-center my-4" style="height: 752px; width: 470.4px;"
+>
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" (click)="imageUpload()">Upload</span>
+  </div>
+
+  <div class="custom-file">
+    <input type="file" class="custom-file-input" id="image"  accept="image/*" (change)="fileSelected($event)" value="" >
+    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+  </div>
+</div>
+
+  <div style="margin-bottom: 50px;">
+    <div class="card my-4">
+      <div class="d-flex flex-row p-2">
+        <a href="#"
+          ><img
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTK2nG24AYDm6FOEC7jIfgubO96GbRso2Xshu1f8abSYQ&s"
+            alt=""
+            width="30"
+              height="30"
+              class="rounded-circle me-2"
+        /></a>
+        <strong>Kullanıcı Adı</strong>
+      </div>
+      <img
+        src="https://images.unsplash.com/photo-1481349518771-20055b2a7b24?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cmFuZG9tfGVufDB8fDB8fA%3D%3D&w=1000&q=80"
+        class="card-img-top"
+        alt="..."
+        id="images"
+      />
+      <div class="card-body">
+        <h5 class="card-title">Card title</h5>
+        <p class="card-text">
+          This is a wider card with supporting text below as a natural lead-in
+          to additional content. This content is a little bit longer.
+        </p>
+        <p class="card-text">
+          <small class="text-muted">Last updated 3 mins ago</small>
+        </p>
+      </div>
+    </div>
+    <div class="card my-4">
+      <div class="d-flex flex-row p-2">
+        <a href="#"
+          ><img
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTK2nG24AYDm6FOEC7jIfgubO96GbRso2Xshu1f8abSYQ&s"
+            alt=""
+            width="30"
+              height="30"
+              class="rounded-circle me-2"
+        /></a>
+        <strong>Kullanıcı Adı</strong>
+      </div>
+      <img
+        src="https://images.unsplash.com/photo-1481349518771-20055b2a7b24?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cmFuZG9tfGVufDB8fDB8fA%3D%3D&w=1000&q=80"
+        class="card-img-top"
+        alt="..."
+      />
+      <div class="card-body">
+        <h5 class="card-title">Card title</h5>
+        <p class="card-text">
+          This is a wider card with supporting text below as a natural lead-in
+          to additional content. This content is a little bit longer.
+        </p>
+        <p class="card-text">
+          <small class="text-muted">Last updated 3 mins ago</small>
+        </p>
+      </div>
+    </div>
+
+  </div>
+</div>

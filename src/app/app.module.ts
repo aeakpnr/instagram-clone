@@ -17,6 +17,9 @@ import { HomeComponent } from './home/home.component';
 import { SidebarComponent } from './home/sidebar/sidebar.component';
 import { HomePageComponent } from './home/home-page/home-page.component';
 import { HomeRoutingModule } from './home/home-routing.module';
+import { MessagesComponent } from './home/messages/messages.component';
+import { DiscoverComponent } from './home/discover/discover.component';
+import { ProfileComponent } from './home/profile/profile.component';
 
 
 
@@ -27,6 +30,9 @@ import { HomeRoutingModule } from './home/home-routing.module';
     HomeComponent,
     SidebarComponent,
     HomePageComponent,
+    MessagesComponent,
+    DiscoverComponent,
+    ProfileComponent,
 
 
   ],

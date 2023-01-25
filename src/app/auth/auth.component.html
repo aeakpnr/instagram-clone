@@ -116,7 +116,7 @@
     <div class="d-flex justify-content-center align-items-center mt-5">
       <form
         class="form-signin d-flex justify-content-center align-items-center flex-column"
-        style="width: 50%"
+
         [formGroup]="singupForm"
         (ngSubmit)="singupSubmit()"
       >
@@ -132,12 +132,12 @@
           class="d-flex justify-content-end align-items-center"
           style="width: 100%"
         >
-          <label for="name" class="my-2 sr-only">İsim Soyisim:</label>
+
           <input
             type="text"
             id="name"
-            class="form-control my-2 ms-3"
-            style="width: 40rem"
+            class="form-control my-2"
+            width="100%"
             placeholder="İsim Soyisim"
             required=""
             autofocus=""
@@ -148,12 +148,28 @@
           class="d-flex justify-content-end align-items-center"
           style="width: 100%"
         >
-          <label for="email" class="my-2 sr-only">Email:</label>
+
+          <input
+            type="text"
+            id="name"
+            class="form-control my-2 "
+            width="100%"
+            placeholder="Kullanıcı Adı"
+            required=""
+            autofocus=""
+            formControlName="userName"
+          />
+        </div>
+        <div
+          class="d-flex justify-content-end align-items-center"
+          style="width: 100%"
+        >
+
           <input
             type="email"
             id="email"
-            class="form-control my-2 ms-3"
-            style="width: 40rem"
+            class="form-control my-2"
+            style="width: 100%"
             placeholder="Email address"
             required=""
             autofocus=""
@@ -161,22 +177,22 @@
           />
         </div>
         <div
-          class="d-flex justify-content-end align-items-center"
-          style="width: 100%"
+          class="d-flex justify-content-center align-items-center"
+          style="width:100%"
         >
-          <label for="password" class="my-2 sr-only">Password:</label>
+
           <input
             type="password"
             id="password"
-            class="form-control my-2 ms-3"
-            style="width: 40rem"
+            class="form-control my-2"
+            style="width: 100%"
             placeholder="Password"
             required=""
             formControlName="password"
           />
         </div>
 
-        <button class="btn btn-lg btn-primary btn-block" (click)="singinSubmit()" type="submit">
+        <button class="btn btn-lg btn-primary btn-block px-0 mt-3" style="width: 100%;" (click)="singinSubmit()" type="submit">
           Sign Up
         </button>
         <p class="mt-5 mb-3 text-muted">© 2017-2018</p>

@@ -1,1 +1,17 @@
 
+.sidenav {
+  height:100%;/*Tam yükseklik: 'otomatik' yükseklik istiyorsanız bunu kaldırın*/
+  display: block;
+  position: fixed; /* Sabit Kenar Çubuğu (kaydırmada, yerinde kal) */
+  z-index: 1; /* Üst Katmanda kalmak */
+  top: 0; /* En üstten menü oluştur */
+  left: 0;/* Soldan menü oluştur */
+  background-color: #111; /* Menü siyah renk olsun */
+  overflow-x: hidden; /* Yatay kaydırmayı devre dışı bırak */
+
+ }
+ .cards{
+
+  margin-left: 455px;
+
+ }
