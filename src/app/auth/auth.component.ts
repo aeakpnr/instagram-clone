@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Database, getDatabase, ref, set } from '@angular/fire/database';
 import { AuthService } from '../Service/auth.service';
 import { DbService } from '../Service/db-service.service';
+import { UserSingup } from '../classes/user-singup';
 
 @Component({
   selector: 'app-auth',
@@ -14,40 +15,51 @@ export class AuthComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private dbService: DbService
+    private dbService: DbService,
+    public userSignupClass: UserSingup
   ) {}
-  singupForm = new FormGroup({
+  signupForm = new FormGroup({
     name: new FormControl(''),
     userName: new FormControl(''),
-    email: new FormControl('', { nonNullable: true }),
-    password: new FormControl('', { nonNullable: true }),
-  });
-  singinForm = new FormGroup({
     email: new FormControl(''),
     password: new FormControl(''),
   });
-  ngOnInit(): void {}
-  singinSubmit() {
+  signinForm = new FormGroup({
+    email: new FormControl(''),
+    password: new FormControl(''),
+  });
+  ngOnInit(): void {
+
+
+  }
+  signinSubmit() {
     this.authService
-      .singinEmailService(
-        this.singinForm.value.email!,
-        this.singinForm.value.password!
+      .signinEmailService(
+        this.signinForm.value.email!,
+        this.signinForm.value.password!
       )
       .then(() => {});
   }
   singupSubmit() {
-    console.log(this.singupForm.value);
+    const singupClass : UserSingup = {
+      name: this.signupForm.value.name,
+      email: this.signupForm.value.email,
+      password: this.signupForm.value.password,
+      userName: this.signupForm.value.userName
+    }
+    console.log('Kayıt Değerleri: ',singupClass);
+    console.log(this.signupForm.value);
     this.authService
-      .singupEmailService(
-        this.singupForm.value.email!,
-        this.singupForm.value.password!
+      .signupEmailService(
+        this.signupForm.value.email!,
+        this.signupForm.value.password!
       )
       .then((res: any) => {
         this.dbService.userSignupDb(
-          this.singupForm.value.name!,
-          this.singupForm.value.userName!,
-          this.singupForm.value.email!,
-          this.singupForm.value.password!
+          singupClass.name!,
+          singupClass.userName!,
+          singupClass.email!,
+          singupClass.password!,
         );
       });
   }

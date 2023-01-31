@@ -13,21 +13,22 @@ import { AngularFireDatabase } from '@angular/fire/compat/database';
 export class AuthService {
   constructor(private firebaseAuth: AngularFireAuth, private router : Router, private database: AngularFireDatabase) {}
 
-  async singupEmailService(email: string, password: string) {
+  async signupEmailService(email: string, password: string) {
     return await this.firebaseAuth
       .createUserWithEmailAndPassword(email, password)
       .then((res) => {
+        console.log('Kayıt Verileri: ',res);
 
         localStorage.setItem('user', JSON.stringify(res.user))
         this.router.navigate(['']);
       });
   }
-  async singupGmailService() {
+  async signupGmailService() {
     return await this.firebaseAuth
       .signInWithPopup(new GoogleAuthProvider())
       .then((res) => localStorage.setItem('user', JSON.stringify(res.user)));
   }
-  async singinEmailService(email: string, password: string) {
+  async signinEmailService(email: string, password: string) {
     return await this.firebaseAuth
       .signInWithEmailAndPassword(email, password)
       .then((res) => {
@@ -37,12 +38,12 @@ export class AuthService {
         this.router.navigate([''])
       });
   }
-  async singinGmailService() {
+  async signinGmailService() {
     return await this.firebaseAuth
       .signInWithPopup(new GoogleAuthProvider())
       .then((res) => localStorage.setItem('user', JSON.stringify(res.user)));
   }
-  async singoutService(){
+  async signoutService(){
     return await this.firebaseAuth.signOut().then((res)=> {
       localStorage.clear();
 

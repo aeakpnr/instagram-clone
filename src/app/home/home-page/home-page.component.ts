@@ -1,4 +1,5 @@
 import { Component, OnInit, OnChanges } from '@angular/core';
+import { StorageReference } from 'firebase/storage';
 import { ImageService } from 'src/app/Service/image.service';
 
 @Component({
@@ -9,8 +10,10 @@ import { ImageService } from 'src/app/Service/image.service';
 export class HomePageComponent implements OnInit, OnChanges {
   image:any
   selecetedFile=null
+  postsArray:any=[]
+  denemeArray: any =[]
   user = JSON.parse(localStorage.getItem('user') || '')
-  img = document.getElementById('image')
+  img:any
   constructor(private imageService: ImageService) { }
 
   ngOnChanges():void{
@@ -19,13 +22,19 @@ export class HomePageComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
 
-this.imageService.getMetadata(this.user.uid).then((res:any)=>{
-      console.log(res);
-      this.image=res
-      const img = document.getElementById('images')
-      img!.setAttribute("src", res)
-console.log(document.getElementById('images'));
+// this.imageService.getMetadata(this.user.uid).then((res:any)=>{
+//       console.log(res);
+//       this.image=res
+//       const img = document.getElementById('images')
+//       img!.setAttribute("src", res)
+// console.log(document.getElementById('images'));
+//     })
+    this.imageService.getPosts(this.user.uid).then((res:any)=>{
+      this.postsArray=res
+      this.img = document.getElementById('images')
+      this.img!.setAttribute("src", res[1])
     })
+    console.log(this.postsArray);
 
 
   }
@@ -35,7 +44,7 @@ console.log(document.getElementById('images'));
   }
   imageUpload(){
 
-    this.imageService.imageUploadService(this.selecetedFile,this.user.uid)
+    this.imageService.postService(this.selecetedFile,this.user.uid)
   }
 
 }

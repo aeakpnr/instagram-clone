@@ -47,7 +47,7 @@
         aria-controls="profile-tab-pane"
         aria-selected="false"
       >
-        Sing Up
+        Sign Up
       </button>
     </li>
   </ul>
@@ -64,8 +64,8 @@
     <div class="d-flex justify-content-center align-items-center mt-5">
       <form
         class="form-signin d-flex justify-content-center align-items-center flex-column"
-        [formGroup]="singinForm"
-        (ngSubmit)="singinSubmit()"
+        [formGroup]="signinForm"
+        (ngSubmit)="signinSubmit()"
       >
         <img
           class="my-2"
@@ -117,7 +117,7 @@
       <form
         class="form-signin d-flex justify-content-center align-items-center flex-column"
 
-        [formGroup]="singupForm"
+        [formGroup]="signupForm"
         (ngSubmit)="singupSubmit()"
       >
         <img
@@ -127,7 +127,7 @@
           width="72"
           height="72"
         />
-        <h1 class="h3 my-2 font-weight-normal">Please sign in</h1>
+        <h1 class="h3 my-2 font-weight-normal">Please sign Up</h1>
         <div
           class="d-flex justify-content-end align-items-center"
           style="width: 100%"
@@ -192,7 +192,7 @@
           />
         </div>
 
-        <button class="btn btn-lg btn-primary btn-block px-0 mt-3" style="width: 100%;" (click)="singinSubmit()" type="submit">
+        <button class="btn btn-lg btn-primary btn-block px-0 mt-3" style="width: 100%;" (click)="signinSubmit()" type="submit">
           Sign Up
         </button>
         <p class="mt-5 mb-3 text-muted">© 2017-2018</p>
