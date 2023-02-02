@@ -30,7 +30,6 @@ export class AuthComponent implements OnInit {
   });
   ngOnInit(): void {
 
-
   }
   signinSubmit() {
     this.authService
@@ -47,20 +46,28 @@ export class AuthComponent implements OnInit {
       password: this.signupForm.value.password,
       userName: this.signupForm.value.userName
     }
-    console.log('Kayıt Değerleri: ',singupClass);
+    const value = this.dbService.userNamesControl(singupClass.userName!)
+    value.then((res)=> {
+      console.log(res);
+
+    })
+    // if(){
+
+    // }
+    // console.log('Kayıt Değerleri: ',singupClass);
     console.log(this.signupForm.value);
-    this.authService
-      .signupEmailService(
-        this.signupForm.value.email!,
-        this.signupForm.value.password!
-      )
-      .then((res: any) => {
-        this.dbService.userSignupDb(
-          singupClass.name!,
-          singupClass.userName!,
-          singupClass.email!,
-          singupClass.password!,
-        );
-      });
+    // this.authService
+    //   .signupEmailService(
+    //     this.signupForm.value.email!,
+    //     this.signupForm.value.password!
+    //   )
+    //   .then((res: any) => {
+    //     this.dbService.userSignupDb(
+    //       singupClass.name!,
+    //       singupClass.userName!,
+    //       singupClass.email!,
+    //       singupClass.password!,
+    //     );
+    //   });
   }
 }
