@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Database, getDatabase, ref, set } from '@angular/fire/database';
+import { Database, getDatabase, object, ref, set } from '@angular/fire/database';
 import { AuthService } from '../Service/auth.service';
 import { DbService } from '../Service/db-service.service';
 import { UserSingup } from '../classes/user-singup';
@@ -12,6 +12,7 @@ import { UserSingup } from '../classes/user-singup';
   styleUrls: ['./auth.component.css'],
 })
 export class AuthComponent implements OnInit {
+  userNameUsing:boolean=false
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -47,27 +48,44 @@ export class AuthComponent implements OnInit {
       userName: this.signupForm.value.userName
     }
     const value = this.dbService.userNamesControl(singupClass.userName!)
-    value.then((res)=> {
+    value.then((res:object)=> {
       console.log(res);
+      console.log(singupClass.userName);
+      const result = Object.hasOwn(res,singupClass.userName!)
+      console.log(result);
 
+
+      if(result==true){
+        this.userNameUsing=true
+        const newUser = new Object (singupClass.userName)
+        console.log(1235);
+
+      }
+      else{
+        this.userNameUsing=false
+
+        this.authService
+        .signupEmailService(
+          this.signupForm.value.email!,
+          this.signupForm.value.password!
+        )
+        .then((res: any) => {
+          console.log(res);
+          const userUid= res
+          this.dbService.userSignupDb(
+            singupClass.name!,
+            singupClass.userName!,
+            singupClass.email!,
+            singupClass.password!,
+            userUid
+            );
+        }).then(()=>{
+          this.router.navigate([''])
+        });
+    }
     })
-    // if(){
 
-    // }
-    // console.log('Kayıt Değerleri: ',singupClass);
     console.log(this.signupForm.value);
-    // this.authService
-    //   .signupEmailService(
-    //     this.signupForm.value.email!,
-    //     this.signupForm.value.password!
-    //   )
-    //   .then((res: any) => {
-    //     this.dbService.userSignupDb(
-    //       singupClass.name!,
-    //       singupClass.userName!,
-    //       singupClass.email!,
-    //       singupClass.password!,
-    //     );
-    //   });
+
   }
 }

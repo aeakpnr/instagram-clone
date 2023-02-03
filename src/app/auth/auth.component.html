@@ -151,7 +151,7 @@
 
           <input
             type="text"
-            id="name"
+            id="userName"
             class="form-control my-2 "
             width="100%"
             placeholder="Kullanıcı Adı"
@@ -159,6 +159,10 @@
             autofocus=""
             formControlName="userName"
           />
+
+        </div>
+        <div *ngIf="userNameUsing">
+          <h6>Kullanıcı Adı Kullanılıyor</h6>
         </div>
         <div
           class="d-flex justify-content-end align-items-center"

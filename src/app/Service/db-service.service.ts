@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { user } from '@angular/fire/auth';
 import { Database, getDatabase, onValue, ref, set } from '@angular/fire/database';
+import { update } from 'firebase/database';
 
 
 @Injectable({
@@ -10,7 +11,7 @@ export class DbService {
  db = getDatabase();
 
   constructor(private database: Database) { }
-  userSignupDb(name:string, userName:string, email:string, password:string){
+  userSignupDb(name:string, userName:string, email:string, password:string, userList:object){
     const user = JSON.parse(localStorage.getItem('user') || '')
       console.log(user.uid);
 
@@ -21,25 +22,23 @@ export class DbService {
     password: password,
 
   });
+  update(ref(this.db,'UserNameList/'), {
+    [userName] : userList
+
+  });
+
   }
   userNamesControl(userName:string){
     const starCountRef = ref(this.db, 'UserNameList');
     let data :object
     let array: Array <string>
-    const promise = new Promise((resolve,reject)=>{
+    const promise = new Promise<object>((resolve,reject)=>{
       onValue(starCountRef, (snapshot) => {
     data = snapshot.val();
-    array =Object.keys(data)
-    console.log();
 
-    const val = array.filter((list)=>{
-      const deneme= userName.toString()
-      console.log(deneme);
 
-      list == '345'
-    })
-  console.log(val);
-  resolve (array)
+
+  resolve (data)
 });
     })
     return promise

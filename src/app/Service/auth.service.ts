@@ -13,16 +13,22 @@ import { AngularFireDatabase } from '@angular/fire/compat/database';
 export class AuthService {
   constructor(private firebaseAuth: AngularFireAuth, private router : Router, private database: AngularFireDatabase) {}
 
-  async signupEmailService(email: string, password: string) {
-    return await this.firebaseAuth
+  signupEmailService(email: string, password: string) {
+    const signupPromise = new Promise((resolve,reject)=>{
+      this.firebaseAuth
       .createUserWithEmailAndPassword(email, password)
       .then((res) => {
         console.log('Kayıt Verileri: ',res);
 
         localStorage.setItem('user', JSON.stringify(res.user))
-        this.router.navigate(['']);
+        resolve (res.user?.uid)
+
       });
+
+    })
+    return signupPromise
   }
+
   async signupGmailService() {
     return await this.firebaseAuth
       .signInWithPopup(new GoogleAuthProvider())
