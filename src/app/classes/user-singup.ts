@@ -11,6 +11,4 @@ export class UserSingup {
 
 
 }
-export class userPosts{
 
-}

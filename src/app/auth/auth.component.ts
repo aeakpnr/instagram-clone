@@ -47,15 +47,15 @@ export class AuthComponent implements OnInit {
       password: this.signupForm.value.password,
       userName: this.signupForm.value.userName
     }
-    const value = this.dbService.userNamesControl(singupClass.userName!)
+    const value = this.dbService.userNamesControl()
     value.then((res:object)=> {
       console.log(res);
       console.log(singupClass.userName);
-      const result = Object.hasOwn(res,singupClass.userName!)
+      const result: any = Object.hasOwn(res,(singupClass.userName!))
       console.log(result);
 
 
-      if(result==true){
+      if(result==true || null){
         this.userNameUsing=true
         const newUser = new Object (singupClass.userName)
         console.log(1235);

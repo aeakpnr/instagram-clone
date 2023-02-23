@@ -1,5 +1,126 @@
 <div class="d-flex flex-row">
-  <app-sidebar class="sidenav" style="display: block;"></app-sidebar>
-  <router-outlet class="cards" style="display: block;"></router-outlet>
+  <app-sidebar
+    class="sidenav"
+    (newCreateButton)="create($event)"
+    [dbRes]="userDb"
+    style="display: block"
+  ></app-sidebar>
+  <router-outlet class="cards" style="display: block"></router-outlet>
+</div>
+<div
+  class="modal fade"
+  id="createModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" >Upload</span>
+          </div>
 
+          <div class="custom-file">
+            <input
+              type="file"
+              class="custom-file-input"
+              id="image"
+              accept="image/*"
+              (change)="fileSelected($event)"
+              value=""
+            />
+            <label class="custom-file-label" for="inputGroupFile01"
+              >Choose file</label
+            >
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-bs-toggle="modal"
+          data-bs-target="#createPost"
+          (click)="imageUpload()"
+        >
+          Save changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="modal fade bd-example-modal-lg"
+  id="createPost"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">
+          Gönderi Oluştur
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body row" [formGroup]="postForm">
+        <div class="col-sm">
+          <img
+            style="width: 100%; height: 100%"
+            id="chosen-image"
+            src=""
+            alt=""
+          />
+        </div>
+        <div class="col-sm">
+          <textarea
+            name=""
+            id=""
+            style="width: 100%; height: 100%; border: none"
+            placeholder="Açıklama yaz"
+            formControlName="postText"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-toggle="modal"
+          data-bs-target="#createModal"
+        >
+          Close
+        </button>
+        <button type="button" class="btn btn-primary" (click)="imageUpload()">Save changes</button>
+      </div>
+    </div>
+  </div>
 </div>

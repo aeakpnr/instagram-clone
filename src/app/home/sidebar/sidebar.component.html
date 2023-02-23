@@ -1,3 +1,4 @@
+
 <div  style="display: block;" >
   <main class="d-flex flex-nowrap" style="height: 100vh">
     <div
@@ -91,7 +92,7 @@
             <div class="ms-2" style="font-size: x-large">Bildirimler</div>
           </div>
         </button>
-        <button class="d-flex text-bg-dark my-4" style="border: none">
+        <button class="d-flex text-bg-dark my-4" style="border: none" (click)="create($event)">
           <div
             class="d-flex flex-row justify-content-center align-items-center"
           >
@@ -110,21 +111,24 @@
                 d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"
               />
             </svg>
-            <div class="ms-2" style="font-size: x-large">Oluştur</div>
+            <div class="ms-2" style="font-size: x-large" >Oluştur</div>
+
           </div>
+
         </button>
-        <button class="d-flex text-bg-dark my-4" style="border: none" routerLink="profile">
+        <button class="d-flex text-bg-dark my-4" style="border: none"  (click)="profileRoute(userName)">
           <div
             class="d-flex flex-row justify-content-center align-items-center"
           >
             <img
-              src="https://github.com/mdo.png"
+              src=""
               alt=""
+              id="sidebar-photo"
               width="30"
               height="30"
               class="rounded-circle me-2"
             />
-            <div class="ms-2" style="font-size: x-large">Profil</div>
+            <div class="ms-2" style="font-size: x-large" id="user-profile-name"></div>
           </div>
         </button>
       </div>
@@ -165,3 +169,4 @@
     </div>
   </main>
 </div>
+

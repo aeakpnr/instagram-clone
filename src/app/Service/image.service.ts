@@ -17,7 +17,7 @@ export class ImageService {
 
   profilPhotoService(file:any,user:any){
     const imagesRef = this.refService(user)
-    const profilPhotoRef = ref(imagesRef,'profil-photo')
+    const profilPhotoRef = ref(imagesRef,`PP/myPhoto`)
      this.imageUploadService(file, profilPhotoRef)
 
   }
@@ -31,17 +31,23 @@ export class ImageService {
 
     const postRef = ref(imagesRef,`posts/${file.name}`)
     // const imageRef = ref(postRef, file.name)
-    return this.imageUploadService(file, postRef).then(()=>{
-      this.listStorage(imagesRef).then((res:any)=>{
+    return this.imageUploadService(file, postRef).then((res)=>{
+      return getDownloadURL(postRef)
+  .then((url) => {
+    console.log(url);
 
+    return url
 
-      })
-     })
+  })
+    })
   }
    getPosts(user:any){
+
     const imageRef = this.refService(user)
     const postsRef = ref(imageRef,'posts')
-    return this.listStorage(postsRef)
+
+    const res= this.imageUrlList(postsRef)
+    return res
   }
 
   imageUploadService(file:any ,ref:any){  // dosyayı, referans adresine yükler
@@ -61,17 +67,52 @@ export class ImageService {
 
   })
   }
-  async listStorage(ref:any){  //referans adresindeki dosyaları obje içerisinde aray olarak getirir.
-    const firstPage = await list(ref, { maxResults: 100 });
-    // console.log(firstPage);
-    const deneme:Array<any>=[]
-    for(let i =0;i<firstPage.items.length;i++){
-      deneme.push(firstPage.items[i].bucket)
-    }
-    console.log(deneme);
 
-    return deneme
+  // async listStorage(ref:any){  //referans adresindeki dosyaları obje içerisinde aray olarak getirir.
+  //   const firstPage = await list(ref, { maxResults: 100 });
+  //   // console.log(firstPage);
+  //   const deneme:Array<any>=[]
+
+
+  //   for(let i =0;i<firstPage.items.length;i++){
+  //     deneme.push(firstPage.items[i].toString())
+  //     console.log(firstPage.items[i].toString());
+  //   }
+  //   console.log(deneme);
+  //   return deneme
+
+  // }
+  imageUrlList(ref:any){
+    const imageArray:Array<any>=[]
+    listAll(ref).then((res)=>{
+      console.log(res);
+
+      res.items.forEach((item:any)=>{
+        getDownloadURL(item).then((url:any)=>{
+          imageArray.push(url)
+
+        })
+      })
+
+      console.log(imageArray);
+
+    })
+return imageArray
+
+
+
+
   }
-
+  getProfilePhoto(user:any){
+    const promise = new Promise((resolve,rejecet)=>{
+      const imagesRef = this.refService(user)
+    const profilPhotoRef = ref(imagesRef,`PP/myPhoto`)
+      getDownloadURL(profilPhotoRef).then((res)=>{
+        console.log(res);
+        resolve (res)
+      })
+    })
+    return promise
+  }
 
 }

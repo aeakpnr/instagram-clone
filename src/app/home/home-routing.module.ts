@@ -30,6 +30,10 @@ const routes: Routes = [
         path: 'profile',
         component: ProfileComponent,
       },
+      {
+        path: 'profile/:username',
+        component: ProfileComponent,
+      },
     ],
   }, //children eklenecek
 ];
