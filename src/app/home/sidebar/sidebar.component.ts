@@ -11,6 +11,7 @@ import { AuthService } from '../../Service/auth.service';
 })
 export class SidebarComponent implements OnInit {
   @Input() dbRes :any
+  @Input() userProfilePhoto :any
   @Output() newCreateButton = new EventEmitter<boolean>()
   userUid = JSON.parse(localStorage.getItem('user') || '').uid
   userName:any
@@ -19,10 +20,13 @@ export class SidebarComponent implements OnInit {
   createButton: boolean=false
   ngOnInit(): void {
 
-    this.imageService.getProfilePhoto(this.userUid).then((res)=>{
+    this.userProfilePhoto.then((res:any)=>{
+      console.log('profile PHOTO RES SIDEBAR ',res);
       const profilePhoto:any = document.getElementById('sidebar-photo')
       profilePhoto.setAttribute("src", res)
     })
+
+
     this.dbRes.then((res:any)=>{
       console.log(res);
       this.userName= res.username

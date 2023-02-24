@@ -8,6 +8,6 @@ export class userPosts {
   url!:string | null | undefined
   username!:string | null | undefined
   date!: Date | null | undefined
-
+  uid:any
 }
 

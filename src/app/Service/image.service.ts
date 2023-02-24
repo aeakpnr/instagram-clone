@@ -16,8 +16,8 @@ export class ImageService {
   constructor() { }
 
   profilPhotoService(file:any,user:any){
-    const imagesRef = this.refService(user)
-    const profilPhotoRef = ref(imagesRef,`PP/myPhoto`)
+
+    const profilPhotoRef = ref(this.storage,`ProfilePhotos/${user}`)
      this.imageUploadService(file, profilPhotoRef)
 
   }
@@ -90,23 +90,16 @@ export class ImageService {
       res.items.forEach((item:any)=>{
         getDownloadURL(item).then((url:any)=>{
           imageArray.push(url)
-
         })
       })
-
       console.log(imageArray);
-
     })
 return imageArray
-
-
-
 
   }
   getProfilePhoto(user:any){
     const promise = new Promise((resolve,rejecet)=>{
-      const imagesRef = this.refService(user)
-    const profilPhotoRef = ref(imagesRef,`PP/myPhoto`)
+      const profilPhotoRef = ref(this.storage,`ProfilePhotos/${user}`)
       getDownloadURL(profilPhotoRef).then((res)=>{
         console.log(res);
         resolve (res)
@@ -114,5 +107,24 @@ return imageArray
     })
     return promise
   }
+  getProfilePhotolist(user:any){
+    const urlList:any= []
+    const promise = new Promise<Array<any>>((resolve,rejecet)=>{
+      const profilPhotoRef = ref(this.storage,`ProfilePhotos`)
+      listAll(profilPhotoRef).then((res)=>{
+        res.items.forEach((itemRef:any,index) => {
+          getDownloadURL(itemRef).then((url:any)=>{
+            urlList.push( {userPhoto: url, uid:itemRef.name})
+            if(res.items.length==index+1){
+              resolve (urlList)
+            }
+          })
 
+
+        });
+
+      })
+    })
+    return promise
+  }
 }

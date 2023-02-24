@@ -4,20 +4,22 @@
 
 
   <div style="margin-bottom: 50px;">
-    <div class="card my-4" >
+    <div class="card my-4" *ngFor="let item of postList">
       <div class="d-flex flex-row p-2">
-        <a href="#"
+        <a routerLink="/profile/{{item.username}}" class="text-decoration-none text-black"
           ><img
-            src=""
+            src={{item.userPhoto}}
             alt=""
             width="30"
               height="30"
               class="rounded-circle me-2"
-        /></a>
-        <strong>Kullanıcı Adı</strong>
+        />
+        <strong> {{item.username}}</strong>
+      </a>
+
       </div>
       <img
-        src=""
+        src={{item.url}}
         class="card-img-top"
         alt=""
         id="images"
@@ -25,42 +27,14 @@
       <div class="card-body">
         <h5 class="card-title">Card title</h5>
         <p class="card-text">
-          This is a wider card with supporting text below as a natural lead-in
-          to additional content. This content is a little bit longer.
+          {{item.text}}
         </p>
         <p class="card-text">
-          <small class="text-muted">Last updated 3 mins ago</small>
+          <small class="text-muted">{{item.datePost}}</small>
         </p>
       </div>
     </div>
-    <div class="card my-4">
-      <div class="d-flex flex-row p-2">
-        <a href="#"
-          ><img
-            src=""
-            alt=""
-            width="30"
-              height="30"
-              class="rounded-circle me-2"
-        /></a>
-        <strong>Kullanıcı Adı</strong>
-      </div>
-      <img
-        src=""
-        class="card-img-top"
-        alt="..."
-      />
-      <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">
-          This is a wider card with supporting text below as a natural lead-in
-          to additional content. This content is a little bit longer.
-        </p>
-        <p class="card-text">
-          <small class="text-muted">Last updated 3 mins ago</small>
-        </p>
-      </div>
-    </div>
+
 
   </div>
 </div>

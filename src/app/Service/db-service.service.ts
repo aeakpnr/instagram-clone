@@ -38,10 +38,12 @@ export class DbService {
 
 
 
-    update(ref(this.db, 'posts/' + username+'/'+postClass.date), {
+    update(ref(this.db, 'posts/'+postClass.date), {
+      username:username,
       datePost:postClass.date,
       text:postClass.text,
-      url:postClass.url
+      url:postClass.url,
+      uid:postClass.uid
     });
 
   }
@@ -123,64 +125,84 @@ export class DbService {
     return promise
 
   }
-  sortingPosts(){
-    let data: object;
+  // sortingPosts(){
+  //   let data: object;
+  //   const user = JSON.parse(localStorage.getItem('user') || '');
+  //   console.log(user.uid);
+  //   const dbase = ref(this.db, 'users/'+user.uid)
+  //   const promise = new Promise<object>((resolve, reject)=>{
+  //     get(child(dbase,'/posts')).then((res)=>{
+  //       data=res.val()
+  //       console.log('post verileri çağırma: ',data);
+  //       resolve(data)
+  //     })
+  //   })
+  //   return promise
+  // }
+  dbFollow(following:any,followers:any,profileUid:any){
     const user = JSON.parse(localStorage.getItem('user') || '');
     console.log(user.uid);
-    const dbase = ref(this.db, 'users/'+user.uid)
-    const promise = new Promise<object>((resolve, reject)=>{
-      get(child(dbase,'/posts')).then((res)=>{
-        data=res.val()
-        console.log('post verileri çağırma: ',data);
-        resolve(data)
-      })
-    })
-    return promise
-  }
-  dbFollow(values:any){
-    const user = JSON.parse(localStorage.getItem('user') || '');
-    console.log(user.uid);
-    console.log(values);
+    console.log(following);
+    const followersRef =ref(this.db, 'users/'+profileUid+'/followers/'+followers.username)
+    const followingRef = ref(this.db, 'users/'+user.uid+'/following/'+following.username)
+    update(followersRef,followers).then((res)=>{
 
-    const dbase = ref(this.db, 'users/'+user.uid+'/following/'+values.username)
-    return update(dbase,values).then((res)=>{
+    })
+    return update(followingRef,following).then((res)=>{
       console.log(res);
       return res
     })
   }
-  dbUnfollow(username:any){
+  dbUnfollow(username:any,followingUid:any,myUserName:any){
     const user = JSON.parse(localStorage.getItem('user') || '');
     console.log(user.uid);
+    const followersRef = ref(this.db, 'users/'+followingUid+'/followers/'+myUserName)
+    const followingRef = ref(this.db, 'users/'+user.uid+'/following/'+username)
+    remove(followersRef).then((res)=>{
+      console.log(res);
 
-    const dbase = ref(this.db, 'users/'+user.uid+'/following/'+username)
-    return remove(dbase).then((res)=>{
+    })
+    return remove(followingRef).then((res)=>{
       console.log(res);
       return res
     })
   }
   getPosts(username:any){
+    const posts:any=[]
     const refDb = ref(this.db,);
     let data: object;
+    const recentPostsRef = query(ref(this.db, 'posts'),orderByChild('username') ,equalTo(username));
     const promise = new Promise<object>((resolve, reject) => {
-      get(child(refDb,'posts/'+username)).then((res)=>{
-        data=res.val()
-        console.log('Get POSTS: ',data);
-        resolve(data)
+      get(recentPostsRef).then((res)=>{
+
+        res.forEach(element =>{
+          posts.push(element.val())
+        })
+
       })
+      resolve (posts)
     });
     return promise;
   }
-  postsListining(username:string){
-    const recentPostsRef = query(ref(this.db, 'posts'),limitToFirst(1));
+  postsListining(followingList:Array<any>,username:string){
+    console.log(followingList);
 
-    get(recentPostsRef).then((res)=>{
-      const deneme:any=[]
-      res.forEach(element =>{
-        deneme.push(element.val())
+    followingList.push(username)
+    const followingPosts:Array<any>=[]
+    const promise = new Promise<Array<any>>((resolve, reject) =>{
+      followingList.forEach((element,index)=>{
+        const recentPostsRef = query(ref(this.db, 'posts'),orderByChild('username') ,equalTo(element));
+
+          get(recentPostsRef).then((res)=>{
+            res.forEach(element =>{
+              followingPosts.push(element.val())
+            })
+            if(followingList.length==index+1){
+              resolve (followingPosts)
+            }
+          })
       })
-      console.log('post Listining: ',deneme);
-    })
-
-
+  })
+  return promise
   }
 }

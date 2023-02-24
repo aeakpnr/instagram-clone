@@ -21,6 +21,8 @@ export class HomeComponent implements OnInit {
   deneme: any;
   userDb = this.dbService.getUserData(this.user.uid);
   isFollow!:boolean
+  userProfilePhoto:unknown
+  profilePhoto:any
 
   constructor(
     private authService: AuthService,
@@ -31,7 +33,11 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-
+    this.profilePhoto= this.imageService.getProfilePhoto(this.user.uid).then((res)=>{
+      this.userProfilePhoto=res
+      console.log('profile Photo',this.userProfilePhoto);
+      return this.userProfilePhoto
+    })
 
 
   }
@@ -74,7 +80,7 @@ export class HomeComponent implements OnInit {
         date: date,
         url: res,
         username:this.user.username,
-
+        uid:this.user.uid
       }
       this.dbService.userPostDb(postClass,this.userName)
 

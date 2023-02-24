@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { object } from 'rxfire/database';
 import { DbService } from 'src/app/Service/db-service.service';
 import { ImageService } from 'src/app/Service/image.service';
 
@@ -18,16 +19,18 @@ export class ProfileComponent implements OnInit {
   profilePosts: any;
   selecetedFile = null;
   user = JSON.parse(localStorage.getItem('user') || '');
-  userNameRoute = this.router.snapshot.paramMap.get('username');
+  userNameRoute:any = this.router.snapshot.paramMap.get('username');
   userData: any;
   userUid!: string;
   editText: boolean = false;
   profileTextValue!: any;
   imageArray: Array<any> = [];
   userPhoto: any;
-  userName: any;
+  myUserName: any;
+  myName:any;
   noPost:boolean=false
   followingCount!:number
+  followersCount!:number
   constructor(
     private router: ActivatedRoute,
     private dbService: DbService,
@@ -57,7 +60,7 @@ export class ProfileComponent implements OnInit {
         this.imageService.getProfilePhoto(this.userUid).then((res) => {
           this.userPhoto = res;
           const profilPhoto: any = document.getElementById('profilePhoto');
-          profilPhoto.setAttribute('src', res);
+          profilPhoto.setAttribute('src', this.userPhoto);
         });
         this.imageArray = this.imageService.getPosts(this.userUid);
 
@@ -71,35 +74,46 @@ export class ProfileComponent implements OnInit {
 
         this.dbService.getUserData(this.userUid).then((res) => {
 
-          console.log('PROFİL SAHİBİ UİD: ',this.userUid);
+            this.followingCount=res.following !=null || res.following  !=undefined ? Object.keys(res.following).length : 0;
+
+
+            this.followersCount=res.followers || res.followers !=undefined ? Object.keys(res.followers).length : 0;
+            console.log(this.followingCount);
+
+          console.log('PROFİL SAHİBİ VERİLERİ: ', res);
           console.log('KULLANICI SAHİBİ UİD: ',this.user.uid);
 
-          const username= res.username
+
           this.dbService.getUserData(this.user.uid).then((res) =>{
+            this.myUserName=res.username
+            this.myName=res.name
 
-         if(res.following){
-            this.followingArray.push(Object.keys(res.following));
-            this.followingCount=this.followingArray[0].length
 
-            if(this.followingArray[0].includes(username)){
-            this.isFollowing=true
-          }
-          else{
-            this.isFollowing=false
-          }
-          }
-          else{
-            this.isFollowing=false
-            this.followingCount=0
-          }
+        //  if(res.following){
+        //     this.followingArray.push(Object.keys(res.following));
+        //     this.followingCount=this.followingArray[0].length
+
+        //     if(this.followingArray[0].includes(this.userNameRoute)){
+        //     this.isFollowing=true
+        //   }
+        //   else{
+        //     this.isFollowing=false
+        //   }
+        //   }
+        //   else{
+        //     this.isFollowing=false
+        //     this.followingCount=0
+        //   }
 
         })
 
 
           this.dbService.getPosts(res.username).then((res)=>{
+            console.log('////////////',res);
+
 
             if(res){
-              this.profilePosts = Object.values(res);
+              this.profilePosts = res;
             }
             else{
               this.profilePosts=false
@@ -110,8 +124,6 @@ export class ProfileComponent implements OnInit {
 
           const array: Array<any> = [];
           array.push(res);
-          this.userName = res.username;
-
           this.profileUser=res
 
           this.userData = array;
@@ -145,7 +157,7 @@ export class ProfileComponent implements OnInit {
   dialogPost(item: any) {
     const postImage: any = document.getElementById('dialog-post');
     const postPhoto: any = document.getElementById('dialog-photo');
-    document.getElementById('dialog-user-name')!.innerHTML = this.userName;
+    document.getElementById('dialog-user-name')!.innerHTML = this.userNameRoute;
     document.getElementById('dialog-text')!.innerHTML = item.text;
     document.getElementById('post-date')!.innerHTML = item.datePost;
     postImage.setAttribute('src', item.url);
@@ -155,14 +167,17 @@ export class ProfileComponent implements OnInit {
     const follow = {
       username:this.profileUser.username,
       name:this.profileUser.name,
-      posts:this.profilePosts,
     }
-    this.dbService.dbFollow(follow).then((res)=>{
+    const followers={
+      username:this.myUserName,
+      name:this.myName,
+    }
+    this.dbService.dbFollow(follow,followers,this.userUid).then((res)=>{
       this.isFollowing=true
     })
   }
   unFollow(){
-    this.dbService.dbUnfollow(this.profileUser.username).then((res)=>{
+    this.dbService.dbUnfollow(this.profileUser.username,this.userUid,this.myUserName).then((res)=>{
       this.isFollowing=false
     })
   }
