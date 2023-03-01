@@ -10,7 +10,7 @@ export class ImageService {
 
   app = initializeApp(environment.firebase)
   storage = getStorage();
-
+  user = JSON.parse(localStorage.getItem('user') || '');
   // Create a storage reference from our storage service
 
   constructor() { }
@@ -107,7 +107,7 @@ return imageArray
     })
     return promise
   }
-  getProfilePhotolist(user:any){
+  getProfilePhotolist(){
     const urlList:any= []
     const promise = new Promise<Array<any>>((resolve,rejecet)=>{
       const profilPhotoRef = ref(this.storage,`ProfilePhotos`)

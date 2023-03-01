@@ -65,8 +65,8 @@
             </ng-template>
           </div>
           <div class=" mb-2">
-            <button class="mx-sm-4"><p class="mb-0">Takipçi</p><p class="mb-0" id="followers-count">{{followersCount}}</p></button>
-            <button class="mx-sm-4"><p class="mb-0">Takip</p><p class="mb-0" id="following-count">{{followingCount}}</p></button>
+            <button class="mx-sm-4" data-toggle="modal" data-target="#followersModal" (click)="followers()"><p class="mb-0"  >Takipçi</p><p class="mb-0" id="followers-count">{{followersCount}}</p></button>
+            <button id="fol-btn" data-toggle="modal" data-target="#followingModal" (click)="following()" class="mx-sm-4"><p class="mb-0">Takip</p><p class="mb-0" id="following-count">{{followingCount}}</p></button>
           </div>
 
         </div>
@@ -215,6 +215,96 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="followingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body container" *ngFor="let item of followingListModal">
+          <div class="row">
+            <div class="col-2 d-flex justify-content-center align-items-center">
+              <a routerLink="" class="text-decoration-none text-black"
+          ><img
+            [src]="item.userPhoto"
+            alt=""
+            width="30"
+              height="30"
+              class="rounded-circle me-2"
+        />
+
+      </a>
+            </div>
+
+          <div class="col-8 container">
+            <div style="height: inherit;">
+            <p class="text-start m-0">{{item.username}}</p>
+            <p class="text-start m-0">{{item.name}}</p>
+            </div>
+
+          </div >
+          <div class="col-2 m-0 d-flex justify-content-center align-items-center" >
+
+              <button style="height: 2rem;" class="btn btn-primary m-0 p-0 px-sm-4" >takip</button>
+          </div>
+
+
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="followersModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body container" *ngFor="let item of followersListModal">
+          <div class="row">
+            <div class="col-2 d-flex justify-content-center align-items-center">
+              <a routerLink="" class="text-decoration-none text-black"
+          ><img
+            [src]="item.userPhoto"
+            alt=""
+            width="30"
+              height="30"
+              class="rounded-circle me-2"
+        />
+
+      </a>
+            </div>
+
+          <div class="col-8 container">
+            <div style="height: inherit;">
+            <p class="text-start m-0">{{item.username}}</p>
+            <p class="text-start m-0">{{item.name}}</p>
+            </div>
+
+          </div >
+          <div class="col-2 m-0 d-flex justify-content-center align-items-center" >
+
+              <button style="height: 2rem;" class="btn btn-primary m-0 p-0 px-sm-4" >takip</button>
+          </div>
+
+
+
+          </div>
+
+        </div>
+
       </div>
     </div>
   </div>

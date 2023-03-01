@@ -75,12 +75,16 @@ export class HomeComponent implements OnInit {
       })
       console.log(res);
       let date: Date = new Date();
+      const { v4: uuidv4 } = require('uuid');
+      const postUid=uuidv4()
       const postClass : userPosts = {
         text: this.postForm.value.postText,
         date: date,
         url: res,
         username:this.user.username,
-        uid:this.user.uid
+        uid:this.user.uid,
+        postUid:postUid,
+        likes:{}
       }
       this.dbService.userPostDb(postClass,this.userName)
 

@@ -17,6 +17,7 @@ import {
   startAt,
 } from '@angular/fire/database';
 import {  equalTo, limitToFirst, orderByValue, update } from 'firebase/database';
+import { userNameList } from '../classes/user-name-list';
 import { userPosts } from '../classes/user-posts';
 
 @Injectable({
@@ -29,21 +30,21 @@ export class DbService {
   userPostDb(
     postClass:userPosts,username:any
   ) {
-    let data: object;
+
     const user = JSON.parse(localStorage.getItem('user') || '');
     console.log(user.uid);
-    const dbase = ref(this.db, 'posts/'+username)
 
 
-
-
-
-    update(ref(this.db, 'posts/'+postClass.date), {
+    update(ref(this.db, 'posts/'+postClass.postUid), {
       username:username,
       datePost:postClass.date,
       text:postClass.text,
       url:postClass.url,
-      uid:postClass.uid
+      uid:postClass.uid,
+      postUid:postClass.postUid,
+      likes:{
+        likeCount:0
+      }
     });
 
   }
@@ -69,8 +70,8 @@ export class DbService {
   }
   userNamesControl() {
     const refDb = ref(this.db,);
-    let data: object;
-    const promise = new Promise<object>((resolve, reject) => {
+    let data: userNameList;
+    const promise = new Promise<userNameList>((resolve, reject) => {
       get(child(refDb,'UserNameList')).then((res)=>{
         data=res.val()
         console.log('userNameList Deneme: ',data);
@@ -125,20 +126,7 @@ export class DbService {
     return promise
 
   }
-  // sortingPosts(){
-  //   let data: object;
-  //   const user = JSON.parse(localStorage.getItem('user') || '');
-  //   console.log(user.uid);
-  //   const dbase = ref(this.db, 'users/'+user.uid)
-  //   const promise = new Promise<object>((resolve, reject)=>{
-  //     get(child(dbase,'/posts')).then((res)=>{
-  //       data=res.val()
-  //       console.log('post verileri çağırma: ',data);
-  //       resolve(data)
-  //     })
-  //   })
-  //   return promise
-  // }
+
   dbFollow(following:any,followers:any,profileUid:any){
     const user = JSON.parse(localStorage.getItem('user') || '');
     console.log(user.uid);
@@ -204,5 +192,63 @@ export class DbService {
       })
   })
   return promise
+  }
+  postLike(post:any,user:any){
+    console.log(user.uid);
+    console.log(post.likes.likeCount);
+    let count:any = 0
+    if(post.likes.likeCount==0){
+      count=1
+    }
+    else{
+      count =Object.keys(post.likes.likeUsers).length+1
+    }
+
+    update(ref(this.db, 'posts/'+post.postUid+'/likes/likeUsers'), {
+      [user.username]: {
+        username:user.username,
+        name:user.name,
+        uid:user.uid,
+      }
+
+
+    });
+    return update(ref(this.db, 'posts/'+post.postUid+'/likes'), {
+
+      likeCount:count++
+
+
+    })
+
+  }
+  postUnLike(post:any,userName:any){
+    console.log(post);
+
+
+    let count =0
+    if(post.likes.likeCount==0){
+      count=0
+    }
+    else{
+      count =Object.keys(post.likes.likeUsers).length-1
+    }
+
+    (Object.keys(post.likes.likeUsers).length)
+    console.log();
+
+    update(ref(this.db, 'posts/'+post.postUid+'/likes'),{
+      likeCount: count
+    })
+    return remove(ref(this.db, 'posts/'+post.postUid+'/likes/likeUsers/'+userName))
+  }
+  getOnePost(postUid:any){
+    const promise =new Promise<userPosts>((resolve,reject)=>{
+      get(ref(this.db, 'posts/'+postUid)).then((res)=>{
+        console.log(res.val());
+        resolve(res.val())
+      })
+    })
+
+    return promise
   }
 }

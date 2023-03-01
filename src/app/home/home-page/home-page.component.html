@@ -1,40 +1,143 @@
 <div
-  class="d-flex flex-column align-items-center my-4" style="height: 752px; width: 470.4px;"
+  class="d-flex flex-column align-items-center my-4"
+  style="height: 752px; width: 470.4px"
 >
-
-
-  <div style="margin-bottom: 50px;">
+  <div style="margin-bottom: 50px">
     <div class="card my-4" *ngFor="let item of postList">
       <div class="d-flex flex-row p-2">
-        <a routerLink="/profile/{{item.username}}" class="text-decoration-none text-black"
+        <a
+          routerLink="/profile/{{ item.username }}"
+          class="text-decoration-none text-black"
           ><img
-            src={{item.userPhoto}}
+            src="{{ item.userPhoto }}"
             alt=""
             width="30"
-              height="30"
-              class="rounded-circle me-2"
-        />
-        <strong> {{item.username}}</strong>
-      </a>
-
+            height="30"
+            class="rounded-circle me-2"
+          />
+          <strong> {{ item.username }}</strong>
+        </a>
       </div>
-      <img
-        src={{item.url}}
-        class="card-img-top"
-        alt=""
-        id="images"
-      />
+      <img src="{{ item.url }}" class="card-img-top" alt="" id="images" />
       <div class="card-body">
-        <h5 class="card-title">Card title</h5>
+        <div
+          *ngIf="
+            (item.likes.likeUsers != undefined &&
+              item.likes.likeUsers[userName]) ||
+              (likeButtonClick == true && unLikeButtonClick == false);
+            else notLiked
+          "
+        >
+          <button
+            style="border: none; background-color: white"
+            (click)="unLiked(item)"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="red"
+              class="bi bi-heart-fill"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fill-rule=""
+                d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"
+              ></path>
+            </svg>
+          </button>
+        </div>
+        <ng-template #notLiked>
+          <button
+            (click)="likeButton(item)"
+            style="border: none; background-color: white"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="red"
+              class="bi bi-heart"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"
+              />
+            </svg>
+          </button>
+        </ng-template>
+        <div class="my-xl-2 " >
+          <button class="bg-white border-0"
+            (click)="likesModal(item)"
+            data-toggle="modal"
+            data-target="#likeModal"
+          >
+            {{ item.likes.likeCount }} beğeni
+          </button>
+        </div>
         <p class="card-text">
-          {{item.text}}
+          {{ item.text }}
         </p>
         <p class="card-text">
-          <small class="text-muted">{{item.datePost}}</small>
+          <small class="text-muted">{{ item.datePost }}</small>
         </p>
       </div>
     </div>
+  </div>
+</div>
+<div
+  class="modal fade"
+  id="likeModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body container" *ngFor="let item of likesArray">
+        <div class="row">
+          <div class="col-2 d-flex justify-content-center align-items-center">
+            <a routerLink="" class="text-decoration-none text-black"
+              ><img
+                [src]="item.userPhoto"
+                alt=""
+                width="30"
+                height="30"
+                class="rounded-circle me-2"
+              />
+            </a>
+          </div>
 
-
+          <div class="col-8 container">
+            <div style="height: inherit">
+              <p class="text-start m-0">{{ item.username }}</p>
+              <p class="text-start m-0">{{ item.name }}</p>
+            </div>
+          </div>
+          <div
+            class="col-2 m-0 d-flex justify-content-center align-items-center"
+          >
+            <button
+              style="height: 2rem"
+              class="btn btn-primary m-0 p-0 px-sm-4"
+            >
+              takip
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

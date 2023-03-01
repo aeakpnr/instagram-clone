@@ -9,5 +9,7 @@ export class userPosts {
   username!:string | null | undefined
   date!: Date | null | undefined
   uid:any
+  postUid:any
+  likes:any
 }
 
