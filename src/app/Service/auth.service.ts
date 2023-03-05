@@ -11,22 +11,24 @@ import { AngularFireDatabase } from '@angular/fire/compat/database';
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private firebaseAuth: AngularFireAuth, private router : Router, private database: AngularFireDatabase) {}
+  constructor(
+    private firebaseAuth: AngularFireAuth,
+    private router: Router,
+    private database: AngularFireDatabase
+  ) {}
 
   signupEmailService(email: string, password: string) {
-    const signupPromise = new Promise((resolve,reject)=>{
+    const signupPromise = new Promise((resolve, reject) => {
       this.firebaseAuth
-      .createUserWithEmailAndPassword(email, password)
-      .then((res) => {
-        console.log('Kayıt Verileri: ',res);
+        .createUserWithEmailAndPassword(email, password)
+        .then((res) => {
+          console.log('Kayıt Verileri: ', res);
 
-        localStorage.setItem('user', JSON.stringify(res.user))
-        resolve (res.user?.uid)
-
-      });
-
-    })
-    return signupPromise
+          localStorage.setItem('user', JSON.stringify(res.user));
+          resolve(res.user?.uid);
+        });
+    });
+    return signupPromise;
   }
 
   async signupGmailService() {
@@ -38,10 +40,8 @@ export class AuthService {
     return await this.firebaseAuth
       .signInWithEmailAndPassword(email, password)
       .then((res) => {
-
-
-        localStorage.setItem('user', JSON.stringify(res.user))
-        this.router.navigate([''])
+        localStorage.setItem('user', JSON.stringify(res.user));
+        this.router.navigate(['']);
       });
   }
   async signinGmailService() {
@@ -49,13 +49,10 @@ export class AuthService {
       .signInWithPopup(new GoogleAuthProvider())
       .then((res) => localStorage.setItem('user', JSON.stringify(res.user)));
   }
-  async signoutService(){
-    return await this.firebaseAuth.signOut().then((res)=> {
+  async signoutService() {
+    return await this.firebaseAuth.signOut().then((res) => {
       localStorage.clear();
+    });
+  }
 
-    })
-  }
-  deneme(){
-    // this.database.list()
-  }
 }

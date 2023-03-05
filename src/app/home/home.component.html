@@ -4,6 +4,7 @@
     (newCreateButton)="create($event)"
     [dbRes]="userDb"
     [userProfilePhoto]="profilePhoto"
+    (search)="searchModal($event)"
     style="display: block"
   ></app-sidebar>
   <router-outlet class="cards" style="display: block"></router-outlet>
@@ -32,7 +33,7 @@
       <div class="modal-body">
         <div class="input-group mb-3">
           <div class="input-group-prepend">
-            <span class="input-group-text" >Upload</span>
+            <span class="input-group-text">Upload</span>
           </div>
 
           <div class="custom-file">
@@ -120,7 +121,102 @@
         >
           Close
         </button>
-        <button type="button" class="btn btn-primary" (click)="imageUpload()">Save changes</button>
+        <button type="button" class="btn btn-primary" (click)="imageUpload()">
+          Save changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="modal fade"
+  id="searchModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="searchModalCenter"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-centered"
+    role="document"
+    [formGroup]="searchForm"
+    (change)="searching()"
+  >
+    <div class="modal-content">
+      <div class="modal-header d-flex flex-column">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4>Ara</h4>
+        <input
+          type="search"
+          class="modal-title"
+          id="searchModalCenter"
+          placeholder="Ara"
+          formControlName="searchText"
+        />
+      </div>
+      <div class="modal-body container" *ngFor="let item of searchArray">
+        <div class="row">
+          <div class="col-2 d-flex justify-content-center align-items-center">
+            <a routerLink="" class="text-decoration-none text-black"
+              ><img
+                [src]="item.userPhoto"
+                alt=""
+                width="30"
+                height="30"
+                class="rounded-circle me-2"
+              />
+            </a>
+          </div>
+
+          <div class="col-6 container">
+            <div style="height: inherit">
+              <p class="text-start m-0">{{ item.username }}</p>
+              <p class="text-start m-0">{{ item.name }}</p>
+            </div>
+          </div>
+          <div
+            class="col-4 m-0 d-flex justify-content-center align-items-center"
+          >
+            <div *ngIf="checkFollow(item.username); else notFollow">
+              <button
+                [id]="item.username"
+                (click)="unFollow(item)"
+                style="height: 2rem"
+                class="btn btn-primary m-0 p-0"
+                value=""
+              >
+                Takibi Bırak
+              </button>
+            </div>
+            <ng-template #notFollow>
+              <button
+                (click)="follow(item)"
+                style="height: 2rem"
+                class="btn btn-primary m-0 p-0 px-sm-3"
+                value=""
+              >
+                Takip Et
+              </button>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          (click)="clickDeneme()"
+        >
+          Close
+        </button>
       </div>
     </div>
   </div>

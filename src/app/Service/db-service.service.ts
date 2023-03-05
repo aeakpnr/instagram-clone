@@ -15,8 +15,16 @@ import {
   remove,
   limitToLast,
   startAt,
+  orderByPriority,
 } from '@angular/fire/database';
-import {  equalTo, limitToFirst, orderByValue, update } from 'firebase/database';
+import {
+  endAt,
+  endBefore,
+  equalTo,
+  limitToFirst,
+  orderByValue,
+  update,
+} from 'firebase/database';
 import { userNameList } from '../classes/user-name-list';
 import { userPosts } from '../classes/user-posts';
 
@@ -27,26 +35,21 @@ export class DbService {
   db = getDatabase();
 
   constructor(private database: Database) {}
-  userPostDb(
-    postClass:userPosts,username:any
-  ) {
-
+  userPostDb(postClass: userPosts, username: any) {
     const user = JSON.parse(localStorage.getItem('user') || '');
     console.log(user.uid);
 
-
-    update(ref(this.db, 'posts/'+postClass.postUid), {
-      username:username,
-      datePost:postClass.date,
-      text:postClass.text,
-      url:postClass.url,
-      uid:postClass.uid,
-      postUid:postClass.postUid,
-      likes:{
-        likeCount:0
-      }
+    update(ref(this.db, 'posts/' + postClass.postUid), {
+      username: username,
+      datePost: postClass.date,
+      text: postClass.text,
+      url: postClass.url,
+      uid: postClass.uid,
+      postUid: postClass.postUid,
+      likes: {
+        likeCount: 0,
+      },
     });
-
   }
   userSignupDb(
     name: string,
@@ -69,186 +72,216 @@ export class DbService {
     });
   }
   userNamesControl() {
-    const refDb = ref(this.db,);
+    const refDb = ref(this.db);
     let data: userNameList;
     const promise = new Promise<userNameList>((resolve, reject) => {
-      get(child(refDb,'UserNameList')).then((res)=>{
-        data=res.val()
-        console.log('userNameList Deneme: ',data);
-        resolve(data)
-      })
+      get(child(refDb, 'UserNameList')).then((res) => {
+        data = res.val();
+        console.log('userNameList Deneme: ', data);
+        resolve(data);
+      });
     });
     return promise;
   }
   getUserUid() {
-    const refDb = ref(this.db,);
+    const refDb = ref(this.db);
     let data: object;
     const promise = new Promise<object>((resolve, reject) => {
-      get(child(refDb,'UserNameList')).then((res)=>{
-        data=res.val()
-        console.log('userNameList Deneme: ',data);
-        resolve(data)
-      })
+      get(child(refDb, 'UserNameList')).then((res) => {
+        data = res.val();
+        console.log('userNameList Deneme: ', data);
+        resolve(data);
+      });
     });
     return promise;
   }
-  getUserData(uid:string){
-    console.log('user Uid: ',uid);
+  getUserData(uid: string) {
+    console.log('user Uid: ', uid);
 
-    const refDb = ref(this.db,`users/`);
+    const refDb = ref(this.db, `users/`);
     let data: object;
     const promise = new Promise<any>((resolve, reject) => {
-      get(child(refDb,uid)).then((res)=>{
-        console.log('getUserData Res Value: ',res.val());
+      get(child(refDb, uid)).then((res) => {
+        console.log('getUserData Res Value: ', res.val());
 
-        data = res.val()
-        console.log('DB GET DENEME: ',data);
-        resolve(data)
-      })
+        data = res.val();
+        console.log('DB GET DENEME: ', data);
+        resolve(data);
+      });
     });
-      return promise
-
+    return promise;
   }
-  profilText(text:any){
+  profilText(text: any) {
     const user = JSON.parse(localStorage.getItem('user') || '');
-    const promise = new Promise<any>((resolve,reject)=>{
+    const promise = new Promise<any>((resolve, reject) => {
       update(ref(this.db, 'users/' + user.uid), {
-      text: text
-    }).then((res)=>{
-      this.getUserData(user.uid).then((res)=>{
-        console.log(res);
-        resolve(res)
-      })
-
-    })
-
-    })
-    return promise
-
+        text: text,
+      }).then((res) => {
+        this.getUserData(user.uid).then((res) => {
+          console.log(res);
+          resolve(res);
+        });
+      });
+    });
+    return promise;
   }
 
-  dbFollow(following:any,followers:any,profileUid:any){
+  dbFollow(following: any, followers: any, profileUid: any) {
     const user = JSON.parse(localStorage.getItem('user') || '');
     console.log(user.uid);
     console.log(following);
-    const followersRef =ref(this.db, 'users/'+profileUid+'/followers/'+followers.username)
-    const followingRef = ref(this.db, 'users/'+user.uid+'/following/'+following.username)
-    update(followersRef,followers).then((res)=>{
-
-    })
-    return update(followingRef,following).then((res)=>{
+    const followersRef = ref(
+      this.db,
+      'users/' + profileUid + '/followers/' + followers.uName
+    );
+    const followingRef = ref(
+      this.db,
+      'users/' + user.uid + '/following/' + following.uName
+    );
+    update(followersRef, followers).then((res) => {});
+    return update(followingRef, following).then((res) => {
       console.log(res);
-      return res
-    })
+      return res;
+    });
   }
-  dbUnfollow(username:any,followingUid:any,myUserName:any){
+  dbUnfollow(username: any, followingUid: any, myUserName: any) {
     const user = JSON.parse(localStorage.getItem('user') || '');
     console.log(user.uid);
-    const followersRef = ref(this.db, 'users/'+followingUid+'/followers/'+myUserName)
-    const followingRef = ref(this.db, 'users/'+user.uid+'/following/'+username)
-    remove(followersRef).then((res)=>{
+    const followersRef = ref(
+      this.db,
+      'users/' + followingUid + '/followers/' + myUserName
+    );
+    const followingRef = ref(
+      this.db,
+      'users/' + user.uid + '/following/' + username
+    );
+    remove(followersRef).then((res) => {
       console.log(res);
-
-    })
-    return remove(followingRef).then((res)=>{
+    });
+    return remove(followingRef).then((res) => {
       console.log(res);
-      return res
-    })
+      return res;
+    });
   }
-  getPosts(username:any){
-    const posts:any=[]
-    const refDb = ref(this.db,);
+  getPosts(username: any) {
+    const posts: any = [];
+    const refDb = ref(this.db);
     let data: object;
-    const recentPostsRef = query(ref(this.db, 'posts'),orderByChild('username') ,equalTo(username));
+    const recentPostsRef = query(
+      ref(this.db, 'posts'),
+      orderByChild('username'),
+      equalTo(username)
+    );
     const promise = new Promise<object>((resolve, reject) => {
-      get(recentPostsRef).then((res)=>{
-
-        res.forEach(element =>{
-          posts.push(element.val())
-        })
-
-      })
-      resolve (posts)
+      get(recentPostsRef).then((res) => {
+        res.forEach((element) => {
+          posts.push(element.val());
+        });
+      });
+      resolve(posts);
     });
     return promise;
   }
-  postsListining(followingList:Array<any>,username:string){
+  postsListining(followingList: Array<any>, username: string) {
     console.log(followingList);
 
-    followingList.push(username)
-    const followingPosts:Array<any>=[]
-    const promise = new Promise<Array<any>>((resolve, reject) =>{
-      followingList.forEach((element,index)=>{
-        const recentPostsRef = query(ref(this.db, 'posts'),orderByChild('username') ,equalTo(element));
+    followingList.push(username);
+    const followingPosts: Array<any> = [];
+    const promise = new Promise<Array<any>>((resolve, reject) => {
+      followingList.forEach((element, index) => {
+        const recentPostsRef = query(
+          ref(this.db, 'posts'),
+          orderByChild('username'),
+          equalTo(element)
+        );
 
-          get(recentPostsRef).then((res)=>{
-            res.forEach(element =>{
-              followingPosts.push(element.val())
-            })
-            if(followingList.length==index+1){
-              resolve (followingPosts)
-            }
-          })
-      })
-  })
-  return promise
+        get(recentPostsRef).then((res) => {
+          res.forEach((element) => {
+            followingPosts.push(element.val());
+          });
+          if (followingList.length == index + 1) {
+            resolve(followingPosts);
+          }
+        });
+      });
+    });
+    return promise;
   }
-  postLike(post:any,user:any){
+  postLike(post: any, user: any) {
     console.log(user.uid);
     console.log(post.likes.likeCount);
-    let count:any = 0
-    if(post.likes.likeCount==0){
-      count=1
-    }
-    else{
-      count =Object.keys(post.likes.likeUsers).length+1
+    let count: any = 0;
+    if (post.likes.likeCount == 0) {
+      count = 1;
+    } else {
+      count = Object.keys(post.likes.likeUsers).length + 1;
     }
 
-    update(ref(this.db, 'posts/'+post.postUid+'/likes/likeUsers'), {
+    update(ref(this.db, 'posts/' + post.postUid + '/likes/likeUsers'), {
       [user.username]: {
-        username:user.username,
-        name:user.name,
-        uid:user.uid,
-      }
-
-
+        username: user.username,
+        name: user.name,
+        uid: user.uid,
+      },
     });
-    return update(ref(this.db, 'posts/'+post.postUid+'/likes'), {
-
-      likeCount:count++
-
-
-    })
-
+    return update(ref(this.db, 'posts/' + post.postUid + '/likes'), {
+      likeCount: count++,
+    });
   }
-  postUnLike(post:any,userName:any){
+  postUnLike(post: any, userName: any) {
     console.log(post);
 
-
-    let count =0
-    if(post.likes.likeCount==0){
-      count=0
-    }
-    else{
-      count =Object.keys(post.likes.likeUsers).length-1
+    let count = 0;
+    if (post.likes.likeCount == 0) {
+      count = 0;
+    } else {
+      count = Object.keys(post.likes.likeUsers).length - 1;
     }
 
-    (Object.keys(post.likes.likeUsers).length)
+    Object.keys(post.likes.likeUsers).length;
     console.log();
 
-    update(ref(this.db, 'posts/'+post.postUid+'/likes'),{
-      likeCount: count
-    })
-    return remove(ref(this.db, 'posts/'+post.postUid+'/likes/likeUsers/'+userName))
+    update(ref(this.db, 'posts/' + post.postUid + '/likes'), {
+      likeCount: count,
+    });
+    return remove(
+      ref(this.db, 'posts/' + post.postUid + '/likes/likeUsers/' + userName)
+    );
   }
-  getOnePost(postUid:any){
-    const promise =new Promise<userPosts>((resolve,reject)=>{
-      get(ref(this.db, 'posts/'+postUid)).then((res)=>{
+  getOnePost(postUid: any) {
+    const promise = new Promise<userPosts>((resolve, reject) => {
+      get(ref(this.db, 'posts/' + postUid)).then((res) => {
         console.log(res.val());
-        resolve(res.val())
-      })
-    })
+        resolve(res.val());
+      });
+    });
 
-    return promise
+    return promise;
+  }
+  getsearchingUser(text: any) {
+    let val: any;
+    const users: Array<any> = [];
+    const recentPostsRef = query(
+      ref(this.db, `users`),
+      limitToFirst(5),
+      orderByChild('username'),
+      startAt(text)
+    );
+    const promise = new Promise((resolve, reject) => {
+      get(recentPostsRef).then((res) => {
+        res.forEach((element) => {
+          val = {
+            uid: element.key,
+            username: element.val().username,
+            name: element.val().name,
+          };
+          users.push(val);
+        });
+        console.log();
+
+        resolve(users);
+      });
+    });
+    return promise;
   }
 }

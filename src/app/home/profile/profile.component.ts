@@ -14,10 +14,10 @@ import { ModalService } from 'src/app/Service/modal.service';
 })
 export class ProfileComponent implements OnInit {
   // user = JSON.parse(localStorage.getItem('user') || '')
-  profilePhotoList:Array<any>=[]
-  followingListModal!:Array<any>;
-  followersListModal:any;
-  followingList:any;
+  profilePhotoList: Array<any> = [];
+  followingListModal!: Array<any>;
+  followersListModal: any;
+  followingList: any;
   followersList: any;
   profileUser: any;
   profileUid!: boolean;
@@ -73,24 +73,23 @@ export class ProfileComponent implements OnInit {
       })
       .then((res) => {
         this.dbService.getUserData(this.userUid).then((res) => {
-          if(res.following){
-            this.followingList=res.following
+          if (res.following) {
+            this.followingList = res.following;
+            console.log('///////////', res.following);
+
             console.log(this.followingList);
 
-            this.followingCount=Object.keys(res.following).length
-
+            this.followingCount = Object.keys(res.following).length;
+          } else {
+            this.followingCount = 0;
           }
-          else{
-            this.followingCount=0
-          }
-          if(res.followers){
-            this.followersList=res.followers
+          if (res.followers) {
+            this.followersList = res.followers;
             console.log(this.followersList);
 
-            this.followersCount=Object.keys(this.followersList).length
-          }
-          else{
-            this.followersCount=0
+            this.followersCount = Object.keys(this.followersList).length;
+          } else {
+            this.followersCount = 0;
           }
 
           // this.followingCount =
@@ -110,15 +109,13 @@ export class ProfileComponent implements OnInit {
           this.dbService.getUserData(this.user.uid).then((res) => {
             this.myUserName = res.username;
             this.myName = res.name;
-            if(this.myUserName!=this.userNameRoute){
-              if(Object.hasOwn(this.followersList,this.myUserName)){
-              this.isFollowing=true
+            if (this.myUserName != this.userNameRoute) {
+              if (Object.hasOwn(this.followersList, this.myUserName)) {
+                this.isFollowing = true;
+              } else {
+                this.isFollowing = false;
+              }
             }
-            else{
-              this.isFollowing=false
-            }
-            }
-
           });
 
           this.dbService.getPosts(res.username).then((res) => {
@@ -174,11 +171,11 @@ export class ProfileComponent implements OnInit {
   }
   follow() {
     const follow = {
-      username: this.profileUser.username,
+      uName: this.profileUser.username,
       name: this.profileUser.name,
     };
     const followers = {
-      username: this.myUserName,
+      uName: this.myUserName,
       name: this.myName,
     };
     this.dbService.dbFollow(follow, followers, this.userUid).then((res) => {
@@ -192,17 +189,18 @@ export class ProfileComponent implements OnInit {
         this.isFollowing = false;
       });
   }
-  following(){
+  following() {
+    console.log(this.followingList);
 
-    this.modalService.followingModal(this.followingList).then((res)=>{
+    this.modalService.followingModal(this.followingList).then((res) => {
       console.log(res);
-      this.followingListModal=res
-    })
+      this.followingListModal = res;
+    });
   }
-  followers(){
-    this.modalService.followingModal(this.followersList).then((res)=>{
-      this.followersListModal=res
-    })
+  followers() {
+    this.modalService.followingModal(this.followersList).then((res) => {
+      this.followersListModal = res;
+    });
   }
 
   // followingModal(following:any) {
@@ -210,7 +208,6 @@ export class ProfileComponent implements OnInit {
   //   const response:any =[]
   //   const followingListKeys=Object.keys(followingList)
   //   const promise = new Promise<any>((resolve,reject)=>{
-
 
   //   this.dbService.userNamesControl().then((res:userNameList)=>{
   //     const userNameList =res
@@ -235,7 +232,6 @@ export class ProfileComponent implements OnInit {
 
   //       followingList.forEach(posts =>{
 
-
   //         profilePhotoList.forEach(photos =>{
 
   //           if(posts.uid==photos.uid){
@@ -251,4 +247,5 @@ export class ProfileComponent implements OnInit {
   //   })
   //   return promise
   // }
+  checkFollow() {}
 }

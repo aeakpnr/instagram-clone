@@ -7,51 +7,55 @@ import { AuthService } from '../../Service/auth.service';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.css']
+  styleUrls: ['./sidebar.component.css'],
 })
 export class SidebarComponent implements OnInit {
-  @Input() dbRes :any
-  @Input() userProfilePhoto :any
-  @Output() newCreateButton = new EventEmitter<boolean>()
-  userUid = JSON.parse(localStorage.getItem('user') || '').uid
-  userName:any
-  constructor(private authService: AuthService, private router:Router, private dbService: DbService, private imageService: ImageService) { }
+  @Input() dbRes: any;
+  @Input() userProfilePhoto: any;
+  @Output() newCreateButton = new EventEmitter<boolean>();
+  @Output() search = new EventEmitter<boolean>();
+  userUid = JSON.parse(localStorage.getItem('user') || '').uid;
+  userName: any;
+  createButton: boolean = false;
+  searchButton: boolean = false;
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private dbService: DbService,
+    private imageService: ImageService
+  ) {}
 
-  createButton: boolean=false
   ngOnInit(): void {
+    this.userProfilePhoto.then((res: any) => {
+      console.log('profile PHOTO RES SIDEBAR ', res);
+      const profilePhoto: any = document.getElementById('sidebar-photo');
+      profilePhoto.setAttribute('src', res);
+    });
 
-    this.userProfilePhoto.then((res:any)=>{
-      console.log('profile PHOTO RES SIDEBAR ',res);
-      const profilePhoto:any = document.getElementById('sidebar-photo')
-      profilePhoto.setAttribute("src", res)
-    })
-
-
-    this.dbRes.then((res:any)=>{
+    this.dbRes.then((res: any) => {
       console.log(res);
-      this.userName= res.username
-      document.getElementById('user-profile-name')!.innerHTML = res.name
+      this.userName = res.username;
+      document.getElementById('user-profile-name')!.innerHTML = res.name;
       console.log(this.dbRes);
-
-    })
-
-
+    });
   }
-  create(event:any){
+  create(event: any) {
     console.log(event);
 
-    this.createButton=!this.createButton
-    this.newCreateButton.emit(event)
+    this.createButton = !this.createButton;
+    this.newCreateButton.emit(event);
   }
-singout(){
-  this.authService.signoutService().then(()=>{
-    this.router.navigate(['login']);
-  })
-}
-profileRoute(userName:any){
-
-  this.router.navigate(['profile/', userName]).then((res)=>window.location.reload())
-
-}
-
+  singout() {
+    this.authService.signoutService().then(() => {
+      this.router.navigate(['login']);
+    });
+  }
+  profileRoute(userName: any) {
+    this.router
+      .navigate(['profile/', userName])
+      .then((res) => window.location.reload());
+  }
+  searchModal(event: any) {
+    this.search.emit(event);
+  }
 }
