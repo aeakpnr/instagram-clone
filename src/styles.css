@@ -1,1 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
+
+.body-bg{
+  background-color:#F0F2F5;
+}
+*{
+  font-family: Times, "Times New Roman", Georgia, serif;
+}

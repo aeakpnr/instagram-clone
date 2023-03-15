@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { getDatabase, onValue, ref } from 'firebase/database';
 import { object } from 'rxfire/database';
 import { userNameList } from 'src/app/classes/user-name-list';
 import { DbService } from 'src/app/Service/db-service.service';
@@ -14,6 +15,8 @@ import { ModalService } from 'src/app/Service/modal.service';
 })
 export class ProfileComponent implements OnInit {
   // user = JSON.parse(localStorage.getItem('user') || '')
+  postDeleteArray:any
+  myFollowingList:any
   profilePhotoList: Array<any> = [];
   followingListModal!: Array<any>;
   followersListModal: any;
@@ -23,6 +26,7 @@ export class ProfileComponent implements OnInit {
   profileUid!: boolean;
   isFollowing!: boolean;
   profilePosts: any;
+  profilePostNumber:number=0
   selecetedFile = null;
   user = JSON.parse(localStorage.getItem('user') || '');
   userNameRoute: any = this.router.snapshot.paramMap.get('username');
@@ -37,6 +41,7 @@ export class ProfileComponent implements OnInit {
   noPost: boolean = false;
   followingCount!: number;
   followersCount!: number;
+  db=getDatabase()
   constructor(
     private router: ActivatedRoute,
     private dbService: DbService,
@@ -49,6 +54,18 @@ export class ProfileComponent implements OnInit {
 
   userNameList = this.dbService.getUserUid();
   ngOnInit(): void {
+    const referance = ref(this.db, `users/`+this.user.uid+'/follow/following');
+      onValue(referance, (snapshot) => {
+      const data = snapshot.val();
+      console.log(data);
+      this.myFollowingList = [];
+      if (data) {
+        this.myFollowingList.push(Object.keys(data));
+        console.log(this.myFollowingList[0]);
+      }
+
+
+    });
     console.log(this.userNameRoute);
 
     this.userNameList
@@ -72,25 +89,72 @@ export class ProfileComponent implements OnInit {
         return this.userUid;
       })
       .then((res) => {
+        const referance = ref(this.db, `users/`+this.userUid+'/follow');
+          onValue(referance, (snapshot) => {
+            const data = snapshot.val();
+            console.log(data);
+            this.followingList = [];
+            if(data){
+              if(data.following){
+                this.followingList = data.following;
+              console.log('///////////', data.following);
+
+              console.log(this.followingList);
+
+              this.followingCount = Object.keys(data.following).length;
+              }
+              else{
+                this.followingCount = 0;
+              }
+      }
+      if (data) {
+        if(data.followers){
+          this.followersList = data.followers;
+          console.log(this.followersList);
+
+          this.followersCount = Object.keys(this.followersList).length;
+        }
+        else{
+          this.followersCount = 0;
+        }
+      }
+      else {
+        this.followersCount = 0;
+      }
+
+
+    });
         this.dbService.getUserData(this.userUid).then((res) => {
-          if (res.following) {
-            this.followingList = res.following;
-            console.log('///////////', res.following);
 
-            console.log(this.followingList);
+          // if (res.follow) {
+          //   if(res.follow.following){
+          //     this.followingList = res.follow.following;
+          //   console.log('///////////', res.follow.following);
 
-            this.followingCount = Object.keys(res.following).length;
-          } else {
-            this.followingCount = 0;
-          }
-          if (res.followers) {
-            this.followersList = res.followers;
-            console.log(this.followersList);
+          //   console.log(this.followingList);
 
-            this.followersCount = Object.keys(this.followersList).length;
-          } else {
-            this.followersCount = 0;
-          }
+          //   this.followingCount = Object.keys(res.follow.following).length;
+          //   }
+          //   else{
+          //     this.followingCount = 0;
+          //   }
+          // } else {
+          //   this.followingCount = 0;
+          // }
+          // if (res.follow) {
+          //   if(res.follow.followers){
+          //     this.followersList = res.follow.followers;
+          //     console.log(this.followersList);
+
+          //     this.followersCount = Object.keys(this.followersList).length;
+          //   }
+          //   else{
+          //     this.followersCount = 0;
+          //   }
+          // }
+          // else {
+          //   this.followersCount = 0;
+          // }
 
           // this.followingCount =
           //   res.following != null || res.following != undefined
@@ -118,15 +182,19 @@ export class ProfileComponent implements OnInit {
             }
           });
 
-          this.dbService.getPosts(res.username).then((res) => {
-            console.log('////////////', res);
+          this.dbService.getPosts(res.username).then((post:object) => {
+            console.log('////////////', post);
+            console.log(post);
 
-            if (res) {
-              this.profilePosts = res;
+            if (post) {
+              this.profilePosts =Object.values(post) ;
+              this.profilePostNumber=this.profilePosts.length
             } else {
               this.profilePosts = false;
               this.noPost = true;
             }
+            console.log();
+
           });
 
           const array: Array<any> = [];
@@ -161,6 +229,7 @@ export class ProfileComponent implements OnInit {
     );
   }
   dialogPost(item: any) {
+    this.postDeleteArray=item
     const postImage: any = document.getElementById('dialog-post');
     const postPhoto: any = document.getElementById('dialog-photo');
     document.getElementById('dialog-user-name')!.innerHTML = this.userNameRoute;
@@ -191,61 +260,57 @@ export class ProfileComponent implements OnInit {
   }
   following() {
     console.log(this.followingList);
-
+    this.followersListModal=[]
     this.modalService.followingModal(this.followingList).then((res) => {
       console.log(res);
-      this.followingListModal = res;
+      this.followersListModal = res;
     });
   }
   followers() {
+    this.followersListModal=[]
     this.modalService.followingModal(this.followersList).then((res) => {
       this.followersListModal = res;
     });
   }
 
-  // followingModal(following:any) {
-  //   const followingList=following
-  //   const response:any =[]
-  //   const followingListKeys=Object.keys(followingList)
-  //   const promise = new Promise<any>((resolve,reject)=>{
+  likeControl(item:any){
 
-  //   this.dbService.userNamesControl().then((res:userNameList)=>{
-  //     const userNameList =res
-  //     followingListKeys.forEach((element,index)=>{
-  //       if(Object.hasOwn(userNameList,element)){
-  //         const obj = {
-  //           uid: userNameList[element as keyof userNameList]
-  //         }
-  //         response.push(Object.assign(followingList[element as keyof userNameList],obj));
-  //     }
-  //     })
-  //     return response
-  //   }).then((res)=>{
+    return this.myUserName!=item.uName ? true : false
+  }
+  followControl(item:any){
+    this.isFollowing =this.myFollowingList[0].includes(item.uName)
+    return this.isFollowing;
+  }
+  modalFollow(item:any){
+    console.log(item);
 
-  //     const followingList:Array<any>=res
-  //     const array:Array<any>=[]
-  //     console.log(followingList);
+    const follow = {
+      uName: item.uName,
+      name: item.name,
+    };
+    const followers = {
+      uName: this.myUserName,
+      name: this.myName,
+    };
+    console.log(item);
 
-  //     this.imageService.getProfilePhotolist().then((res:Array<any>)=>{
-  //       const profilePhotoList=res
-  //       console.log(profilePhotoList);
+    this.dbService.dbFollow(follow, followers, item.uid).then((res) => {
+      this.isFollowing=true
+    });
+  }
+  modalUnFollow(item:any){
+    this.dbService
+    .dbUnfollow(item.uName, item.uid, this.myUserName)
+    .then((res) => {
+      this.isFollowing=false
+    });
+  }
+  deletePost(post:any){
+    this.imageService.postDelete(post).then((res)=>{
+      this.dbService.postDelete(post).then((res)=>{
+        location.reload();
+      })
+    })
 
-  //       followingList.forEach(posts =>{
-
-  //         profilePhotoList.forEach(photos =>{
-
-  //           if(posts.uid==photos.uid){
-  //             array.push(Object.assign(posts, photos))
-  //         }
-  //         })
-
-  //       })
-  //       resolve (array)
-  //     })
-  //   })
-
-  //   })
-  //   return promise
-  // }
-  checkFollow() {}
+  }
 }

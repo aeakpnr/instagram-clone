@@ -1,13 +1,13 @@
-<div class="d-flex flex-row">
+<div class="d-flex justify-content-center">
   <app-sidebar
     class="sidenav"
     (newCreateButton)="create($event)"
     [dbRes]="userDb"
     [userProfilePhoto]="profilePhoto"
     (search)="searchModal($event)"
-    style="display: block"
+
   ></app-sidebar>
-  <router-outlet class="cards" style="display: block"></router-outlet>
+  <router-outlet class="d-flex"  ></router-outlet>
 </div>
 <div
   class="modal fade"
@@ -60,7 +60,7 @@
           class="btn btn-primary"
           data-bs-toggle="modal"
           data-bs-target="#createPost"
-          (click)="imageUpload()"
+
         >
           Save changes
         </button>
@@ -159,6 +159,7 @@
           id="searchModalCenter"
           placeholder="Ara"
           formControlName="searchText"
+          style="outline: none;"
         />
       </div>
       <div class="modal-body container" *ngFor="let item of searchArray">
@@ -184,28 +185,25 @@
           <div
             class="col-4 m-0 d-flex justify-content-center align-items-center"
           >
-            <div *ngIf="checkFollow(item.username); else notFollow">
-              <button
-                [id]="item.username"
-                (click)="unFollow(item)"
-                style="height: 2rem"
-                class="btn btn-primary m-0 p-0"
-                value=""
-              >
-                Takibi Bırak
-              </button>
-            </div>
-            <ng-template #notFollow>
-              <button
-                (click)="follow(item)"
-                style="height: 2rem"
-                class="btn btn-primary m-0 p-0 px-sm-3"
-                value=""
-              >
-                Takip Et
-              </button>
+          <div *ngIf="searchControl(item)">
+          <div *ngIf="followControl(item)==true;else notFollowing">
+            <button (click)="unFollow(item)"
+              style="height: 2rem; width: 7rem;"
+              class="btn btn-primary m-0 p-0 px-sm-2"
+            >
+              Takip Ediliyor
+            </button>
+          </div>
+            <ng-template #notFollowing>
+              <button (click)="follow(item)"
+              style="height: 2rem"
+              class="btn btn-primary m-0 p-0 px-sm-2"
+            >
+              Takip Et
+            </button>
             </ng-template>
           </div>
+        </div>
         </div>
       </div>
       <div class="modal-footer">

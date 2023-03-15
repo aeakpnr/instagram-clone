@@ -18,6 +18,8 @@ export class SidebarComponent implements OnInit {
   userName: any;
   createButton: boolean = false;
   searchButton: boolean = false;
+  clickEventId!:string
+
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -53,9 +55,19 @@ export class SidebarComponent implements OnInit {
   profileRoute(userName: any) {
     this.router
       .navigate(['profile/', userName])
-      .then((res) => window.location.reload());
+
   }
   searchModal(event: any) {
     this.search.emit(event);
   }
+  clickControl(event:any){
+    console.log(event.target.id);
+    this.clickEventId= event.target.id
+  }
+  date(){
+    let d = new Date();
+    const dateUTC = d.toUTCString()
+    console.log(dateUTC);
+
+}
 }

@@ -1,13 +1,12 @@
-
-<div  style="display: block;" >
+<div style="position: sticky">
   <main class="d-flex flex-nowrap" style="height: 100vh">
     <div
-      class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark"
-      style="width: 280px"
+      class="d-flex flex-column flex-shrink-0 p-3 bg-white"
+      style="width: 280px; border: 1px solid rgba(0, 0, 0, 0.199)"
     >
       <a
         href="/"
-        class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none"
+        class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-black text-decoration-none"
       >
         <svg class="bi pe-none me-2" width="40" height="32">
           <use xlink:href="#bootstrap"></use>
@@ -15,10 +14,14 @@
         <span class="fs-4">Sidebar</span>
       </a>
       <hr />
-      <div style="height: 100%">
-        <button class="d-flex text-bg-dark my-4" style="border: none">
+      <div style="height: 100%" class="bg-white">
+        <button
+          class="d-flex text-bg-white my-4 bg-white"
+          style="border: none"
+          ng
+        >
           <div
-            class="d-flex flex-row justify-content-center align-items-center"
+            class="d-flex flex-row justify-content-center align-items-center bg-white"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -32,12 +35,21 @@
                 d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5Z"
               />
             </svg>
-            <div class="ms-2" style="font-size: x-large" routerLink="">Ana Sayfa</div>
+            <div
+              id="homePage"
+              class="ms-2"
+              style="font-size: x-large"
+              routerLink=""
+              (click)="clickControl($event)"
+              [ngClass]="{ button: clickEventId == 'homePage' }"
+            >
+              Ana Sayfa
+            </div>
           </div>
         </button>
-        <button class="d-flex text-bg-dark my-4" style="border: none">
+        <button class="d-flex bg-white my-4" style="border: none">
           <div
-            class="d-flex flex-row justify-content-center align-items-center"
+            class="d-flex flex-row justify-content-center align-items-center bg-white"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -51,12 +63,18 @@
                 d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"
               />
             </svg>
-            <div class="ms-2" style="font-size: x-large" (click)="searchModal($event)">Ara</div>
+            <div
+              class="ms-2 bg-white"
+              style="font-size: x-large"
+              (click)="searchModal($event)"
+            >
+              Ara
+            </div>
           </div>
         </button>
-        <button class="d-flex text-bg-dark my-4" style="border: none">
+        <button class="d-flex bg-white my-4" style="border: none">
           <div
-            class="d-flex flex-row justify-content-center align-items-center"
+            class="d-flex flex-row justify-content-center align-items-center bg-white"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -70,12 +88,22 @@
                 d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"
               />
             </svg>
-            <div class="ms-2" style="font-size: x-large" routerLink="messages">Mesajlar</div>
+            <div
+              class="ms-2"
+              id="messages"
+              style="font-size: x-large"
+              routerLink="messages"
+              (click)="date()"
+              (click)="clickControl($event)"
+              [ngClass]="{ button: clickEventId == 'messages' }"
+            >
+              Mesajlar
+            </div>
           </div>
         </button>
-        <button class="d-flex text-bg-dark my-4" style="border: none">
+        <button class="d-flex bg-white my-4" style="border: none">
           <div
-            class="d-flex flex-row justify-content-center align-items-center"
+            class="d-flex flex-row justify-content-center align-items-center bg-white"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -89,12 +117,24 @@
                 d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"
               />
             </svg>
-            <div class="ms-2" style="font-size: x-large">Bildirimler</div>
+            <div
+              class="ms-2"
+              id="notifications"
+              style="font-size: x-large"
+              (click)="clickControl($event)"
+              [ngClass]="{ button: clickEventId == 'notifications' }"
+            >
+              Bildirimler
+            </div>
           </div>
         </button>
-        <button class="d-flex text-bg-dark my-4" style="border: none" (click)="create($event)">
+        <button
+          class="d-flex bg-white my-4"
+          style="border: none"
+          (click)="create($event)"
+        >
           <div
-            class="d-flex flex-row justify-content-center align-items-center"
+            class="d-flex flex-row justify-content-center align-items-center bg-white"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -111,14 +151,17 @@
                 d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"
               />
             </svg>
-            <div class="ms-2" style="font-size: x-large" >Oluştur</div>
-
+            <div class="ms-2" style="font-size: x-large">Oluştur</div>
           </div>
-
         </button>
-        <button class="d-flex text-bg-dark my-4" style="border: none"  (click)="profileRoute(userName)">
+        <button
+          id="profile"
+          class="d-flex bg-white my-4"
+          style="border: none"
+          (click)="profileRoute(userName)"
+        >
           <div
-            class="d-flex flex-row justify-content-center align-items-center"
+            class="d-flex flex-row justify-content-center align-items-center bg-white"
           >
             <img
               src=""
@@ -128,7 +171,13 @@
               height="30"
               class="rounded-circle me-2"
             />
-            <div class="ms-2" style="font-size: x-large" id="user-profile-name"></div>
+            <div
+              class="ms-2"
+              style="font-size: x-large"
+              id="user-profile-name"
+              (click)="clickControl($event)"
+              [ngClass]="{ button: clickEventId == 'user-profile-name' }"
+            ></div>
           </div>
         </button>
       </div>
@@ -137,7 +186,7 @@
       <div class="dropdown">
         <a
           href="#"
-          class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+          class="d-flex align-items-center text-black text-decoration-none dropdown-toggle"
           data-toggle="dropdown"
           aria-expanded="false"
         >
@@ -156,7 +205,7 @@
           </svg>
           <strong>Daha Fazla</strong>
         </a>
-        <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+        <ul class="dropdown-menu dropdown-menu-white text-small shadow">
           <li><a class="dropdown-item" href="#">New project...</a></li>
           <li><a class="dropdown-item" href="#">Settings</a></li>
           <li><a class="dropdown-item" href="#">Profile</a></li>
@@ -169,4 +218,3 @@
     </div>
   </main>
 </div>
-

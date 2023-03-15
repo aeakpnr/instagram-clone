@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { getDatabase, onValue, ref } from 'firebase/database';
 import { userPosts } from '../classes/user-posts';
 import { AuthService } from '../Service/auth.service';
 import { DbService } from '../Service/db-service.service';
@@ -15,7 +16,7 @@ declare var bootstrap: any;
 export class HomeComponent implements OnInit {
   isFollowing: boolean = false;
   userListArray: any = [];
-  selecetedFile = null;
+  selecetedFile:any = null;
   postForm = new FormGroup({
     postText: new FormControl(''),
   });
@@ -31,7 +32,9 @@ export class HomeComponent implements OnInit {
   searchForm = new FormGroup({
     searchText: new FormControl(''),
   });
+  db=getDatabase()
   followingList: any;
+  myFollowingList:Array<any>=[]
 
   constructor(
     private authService: AuthService,
@@ -62,6 +65,18 @@ export class HomeComponent implements OnInit {
       this.followingList = res.following;
       console.log(res.following);
     });
+    const referance = ref(this.db, `users/`+this.user.uid+'/follow/following');
+      onValue(referance, (snapshot) => {
+      const data = snapshot.val();
+      console.log(data);
+      this.myFollowingList = [];
+      if (data) {
+        this.myFollowingList.push(Object.keys(data));
+        console.log(this.myFollowingList[0]);
+      }
+
+
+    });
   }
   create(click: boolean) {
     const createPost = new bootstrap.Modal(
@@ -74,7 +89,16 @@ export class HomeComponent implements OnInit {
     }
   }
   fileSelected(event: any) {
-    this.selecetedFile = event.target.files[0];
+    console.log(event);
+    const { v4: uuidv4 } = require('uuid');
+        const postUid = uuidv4();
+    const obj  = event.target.files[0];
+    this.selecetedFile = new File([obj], postUid, {type: obj.type});
+    // this.selecetedFile = event.target.files[0];
+
+    console.log(this.selecetedFile);
+
+
     const inputImage: any = document.getElementById('image');
     const chosenImage: any = document.getElementById('chosen-image');
     let reader = new FileReader();
@@ -91,19 +115,23 @@ export class HomeComponent implements OnInit {
       .then((res) => {
         console.log(res);
         let date: Date = new Date();
+        let dateUTC = date.toUTCString()
         const { v4: uuidv4 } = require('uuid');
         const postUid = uuidv4();
         const postClass: userPosts = {
           text: this.postForm.value.postText,
-          date: date,
+          date: dateUTC,
           url: res,
           username: this.user.username,
           uid: this.user.uid,
           postUid: postUid,
           likes: {},
+          postName:this.selecetedFile.name
         };
         this.dbService.userPostDb(postClass, this.myUserName);
-      });
+      }).then((res)=>{
+        location.reload();
+      })
   }
   searchModal(event: any) {
     console.log();
@@ -180,5 +208,14 @@ export class HomeComponent implements OnInit {
       .then((res) => {
         this.isFollowing = false;
       });
+  }
+  followControl(item:any){
+    console.log(item);
+
+    this.isFollowing =this.myFollowingList[0].includes(item.username)
+    return this.isFollowing;
+  }
+  searchControl(item:any){
+    return this.myUserName!=item.username ? true : false
   }
 }

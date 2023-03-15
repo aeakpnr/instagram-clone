@@ -1,6 +1,6 @@
 <div
   class="d-flex flex-column align-items-center my-4"
-  style="height: 752px; width: 470.4px"
+  style="height: 752px; width: 470.4px;"
 >
   <div style="margin-bottom: 50px">
     <div class="card my-4" *ngFor="let item of postList">
@@ -23,7 +23,7 @@
         <div
           *ngIf="
             (item.likes.likeUsers != undefined &&
-              item.likes.likeUsers[userName]) ||
+              item.likes.likeUsers[myUserName]) ||
               (likeButtonClick == true && unLikeButtonClick == false);
             else notLiked
           "
@@ -69,8 +69,7 @@
         <div class="my-xl-2 " >
           <button class="bg-white border-0"
             (click)="likesModal(item)"
-            data-toggle="modal"
-            data-target="#likeModal"
+
           >
             {{ item.likes.likeCount }} beğeni
           </button>
@@ -120,21 +119,34 @@
             </a>
           </div>
 
-          <div class="col-8 container">
+          <div class="col-7 container">
             <div style="height: inherit">
               <p class="text-start m-0">{{ item.username }}</p>
               <p class="text-start m-0">{{ item.name }}</p>
             </div>
           </div>
           <div
-            class="col-2 m-0 d-flex justify-content-center align-items-center"
+            class="col-3 m-0 d-flex justify-content-center align-items-center"
+
           >
-            <button
-              style="height: 2rem"
-              class="btn btn-primary m-0 p-0 px-sm-4"
+          <div *ngIf="likeControl(item)">
+          <div *ngIf="followControl(item)==true;else notFollowing" (ng-change)="isFollowing">
+            <button (click)="unFollow(item)"
+              style="height: 2rem; width: 7rem;"
+              class="btn btn-primary m-0 p-0 px-sm-2"
             >
-              takip
+              Takip Ediliyor
             </button>
+          </div>
+            <ng-template #notFollowing>
+              <button (click)="follow(item)"
+              style="height: 2rem"
+              class="btn btn-primary m-0 p-0 px-sm-2"
+            >
+              Takip Et
+            </button>
+            </ng-template>
+          </div>
           </div>
         </div>
       </div>

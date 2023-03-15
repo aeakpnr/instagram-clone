@@ -1,12 +1,12 @@
-<div class="d-flex flex-column" style="overflow-x: hidden">
-  <div class="d-grid mt-5">
-    <div class="row">
+<div class="d-flex flex-column" style="overflow-x: hidden; width: 1014px; margin-left:15rem ;" >
+  <div class="d-grid mt-5 ">
+    <div class="row d-flex justify-content-center">
       <div
-        class="col-5 d-flex justify-content-center"
+        class="col-5 d-flex justify-content-center body-bg"
         style="min-height: 200px; width: 15rem"
       >
         <button
-          class="bg-white border-0"
+          class="border-0 body-bg"
           style="width: 150px; height: 150px"
           data-toggle="modal"
           data-target=".bd-example-modal-sm"
@@ -24,11 +24,11 @@
       <div class="col-6 me-1">
         <div class="d-grid container">
           <div class="row mb-2" style="width: 30rem; height: 5rem">
-            <div class="col-10">
+            <div class="col-8">
               <h4 id="profile-name"></h4>
               <h4 id="profile-username"></h4>
             </div>
-            <div class="col-2">
+            <div class="col-4">
               <div
                 *ngIf="profileUid; else notMyProfile"
                 class="d-flex justify-content-end"
@@ -55,40 +55,46 @@
                   </svg>
                 </button>
               </div>
-            </div>
-
-            <ng-template #notMyProfile class="col-5">
+              <ng-template #notMyProfile class="d-flex justify-content-end">
               <div *ngIf="isFollowing == true; else notFollow">
-                <button style="width: 8rem; height: 2rem" (click)="unFollow()">
-                  Takibi Bırak
+                <button class="border-0 rounded-3" style="width: 8rem; height: 2rem; background-color: #DADDE1;" (click)="unFollow()">
+                   <strong>Takibi Bırak</strong>
                 </button>
               </div>
               <ng-template #notFollow>
-                <button style="width: 8rem; height: 2rem" (click)="follow()">
+                <button class="border-0 rounded-3" style="width: 8rem; height: 2rem ;background-color: #DADDE1;" (click)="follow()">
                   Takip Et
                 </button>
               </ng-template>
             </ng-template>
+            </div>
+
+
           </div>
-          <div class="mb-2">
+          <div class="mb-2 d-flex flex-row justify-content-center">
+            <div class="mx-sm-4 text-center">
+              <p class="mb-0">Gönderi</p>
+            <strong class="mb-0">{{profilePostNumber}}</strong>
+            </div>
+
             <button
-              class="mx-sm-4"
+              class="mx-sm-4 border-0 body-bg"
               data-toggle="modal"
-              data-target="#followersModal"
+              data-target="#followModal"
               (click)="followers()"
             >
               <p class="mb-0">Takipçi</p>
-              <p class="mb-0" id="followers-count">{{ followersCount }}</p>
+              <strong class="mb-0" id="followers-count">{{ followersCount }}</strong>
             </button>
             <button
               id="fol-btn"
               data-toggle="modal"
-              data-target="#followingModal"
+              data-target="#followModal"
               (click)="following()"
-              class="mx-sm-4"
+              class="mx-sm-4 border-0 body-bg"
             >
               <p class="mb-0">Takip</p>
-              <p class="mb-0" id="following-count">{{ followingCount }}</p>
+              <strong class="mb-0" id="following-count">{{ followingCount }}</strong>
             </button>
           </div>
         </div>
@@ -102,7 +108,7 @@
                     class="form-control"
                     id="profile-text"
                     formControlName="profileText"
-                    rows="3"
+                    rows="2"
                     cols="30"
                   ></textarea>
                   <div>
@@ -163,20 +169,23 @@
       </div>
     </div>
   </div>
-  <div class="mt-5">
-    <div class="container">
-      <div class="row me-5">
+
+      <div class="row container">
+        <div class="row col-4 " *ngFor="let item of profilePosts">
+
+
         <div
-          class="col-4"
-          style="margin-bottom: 3rem"
-          *ngFor="let item of profilePosts"
+
+          class="col-4 "
+
+
         >
-          <div class="">
+          <div class="px-xxl-3">
             <button
               (click)="dialogPost(item)"
               class="border-0 p-xl-0"
               data-toggle="modal"
-              data-target=".bd-example-modal-lg"
+              data-target="#postModal"
             >
               <img
                 class=" "
@@ -185,8 +194,8 @@
               />
             </button>
 
-            <div
-              class="modal fade bd-example-modal-lg"
+            <!-- <div
+              class="modal fade postModal"
               tabindex="-1"
               role="dialog"
               aria-labelledby="myLargeModalLabel"
@@ -210,7 +219,8 @@
                     </div>
                     <div class="col-5 bg-white">
                       <div class="mb-3">
-                        <div class="d-flex flex-row p-2">
+                        <div class="row ">
+                          <div class="col-10 d-flex flex-row p-2">
                           <a href="#"
                             ><img
                               id="dialog-photo"
@@ -222,7 +232,22 @@
                           /></a>
                           <strong id="dialog-user-name"></strong>
                         </div>
+
+                          <button class="btn btn-secondary dropdown col-1" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                              <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                            </svg>
+                          </button>
+
+                          <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                          </ul>
+
                       </div>
+                        </div>
+
 
                       <div class="" style="height: 30rem">
                         <p id="dialog-text"></p>
@@ -232,74 +257,81 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
-    </div>
-  </div>
-  <div
-    class="modal fade"
-    id="followingModal"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-          <button
-            type="button"
-            class="close"
-            data-dismiss="modal"
-            aria-label="Close"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div
-          class="modal-body container"
-          *ngFor="let item of followingListModal"
-        >
-          <div class="row">
-            <div class="col-2 d-flex justify-content-center align-items-center">
-              <a routerLink="" class="text-decoration-none text-black"
-                ><img
-                  [src]="item.userPhoto"
-                  alt=""
-                  width="30"
-                  height="30"
-                  class="rounded-circle me-2"
-                />
-              </a>
-            </div>
+</div>
+<div class="modal fade" id="postModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-xl">
+                <div class="modal-content">
 
-            <div class="col-8 container">
-              <div style="height: inherit">
-                <p class="text-start m-0">{{ item.username }}</p>
-                <p class="text-start m-0">{{ item.name }}</p>
+                  <div class="modal-body row p-0 justify-content-between m-0">
+                    <div class="col-7 p-xl-0" style="max-height: 650px; max-width: 650px;">
+                      <img
+
+                        id="dialog-post"
+                        [src]=""
+                        style="box-sizing: border-box;
+                        object-fit: fill;
+                          min-width: 650px;
+                          min-height: 650px;
+                          max-height: 100%;
+                          max-width: 100%;
+                        "
+                        alt=""
+                      />
+                    </div>
+                    <div class="col-5 bg-white" style="max-width: 460px; max-height: 650px;" >
+                      <div class="d-flex flex-column mb-3" style="height: 100%;">
+                        <div class="d-flex flex-row align-items-start m-xxl-2" >
+                          <div class="justify-content-start" style="width: 100%;">
+                          <a href="#"
+                            ><img
+                              id="dialog-photo"
+                              src=""
+                              alt=""
+                              width="30"
+                              height="30"
+                              class="rounded-circle me-2"
+                          /></a>
+                          <strong id="dialog-user-name"></strong>
+                        </div>
+                        <div class="justify-content-end">
+                          <button class="btn btn-secondary bg-white border-0" type="button" data-toggle="dropdown" aria-expanded="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                              <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                            </svg>
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-dark">
+                            <li style="cursor: pointer;"><a class="dropdown-item active" (click)="deletePost(postDeleteArray)">Sil</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <!-- <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+
+                            <li><a class="dropdown-item" href="#">Separated link</a></li> -->
+                          </ul>
+                        </div>
+
+
+                      </div>
+                      <div class="d-flex align-items-start mb-auto" style="height: 30rem">
+                        <p id="dialog-text"></p>
+                      </div>
+                      <div class="d-flex align-items-end justify-content-end" ><p id="post-date"></p></div>
+                        </div>
+
+
+
+                    </div>
+                  </div>
+
+                </div>
               </div>
             </div>
-            <div
-              class="col-2 m-0 d-flex justify-content-center align-items-center"
-            >
-              <button
-                style="height: 2rem"
-                class="btn btn-primary m-0 p-0 px-sm-4"
-              >
-                takip
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
   <div
     class="modal fade"
-    id="followersModal"
+    id="followModal"
     tabindex="-1"
     role="dialog"
     aria-labelledby="exampleModalLabel"
@@ -335,21 +367,32 @@
               </a>
             </div>
 
-            <div class="col-8 container">
+            <div class="col-7 container">
               <div style="height: inherit">
-                <p class="text-start m-0">{{ item.username }}</p>
+                <p class="text-start m-0">{{ item.uName }}</p>
                 <p class="text-start m-0">{{ item.name }}</p>
               </div>
             </div>
             <div
-              class="col-2 m-0 d-flex justify-content-center align-items-center"
-            >
-              <button
-                style="height: 2rem"
-                class="btn btn-primary m-0 p-0 px-sm-4"
-              >
-                takip
-              </button>
+              class="col-3 m-0 d-flex justify-content-center align-items-center"
+            ><div *ngIf="likeControl(item)">
+              <div *ngIf="followControl(item)==true;else notFollowing">
+                <button (click)="modalUnFollow(item)"
+                  style="height: 2rem; width: 7rem;"
+                  class="btn btn-primary m-0 p-0 px-sm-2"
+                >
+                  Takip Ediliyor
+                </button>
+              </div>
+                <ng-template #notFollowing>
+                  <button (click)="modalFollow(item)"
+                  style="height: 2rem"
+                  class="btn btn-primary m-0 p-0 px-sm-2"
+                >
+                  Takip Et
+                </button>
+                </ng-template>
+              </div>
             </div>
           </div>
         </div>

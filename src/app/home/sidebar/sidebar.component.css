@@ -9,3 +9,14 @@
   overflow-x: hidden; /* Yatay kaydırmayı devre dışı bırak */
 
  }
+ .thick {
+  font-weight: bold;
+}
+
+
+
+.button {
+  font-weight: bold;
+
+  outline: none;
+}

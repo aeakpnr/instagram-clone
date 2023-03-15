@@ -8,6 +8,7 @@ import {
   getDownloadURL,
   listAll,
   list,
+  deleteObject,
 } from 'firebase/storage';
 import { environment } from 'src/environments/environment.prod';
 
@@ -32,17 +33,20 @@ export class ImageService {
     return userRef;
   }
   postService(file: any, user: any) {
-    const imagesRef = this.refService(user);
+    const imagesRef = ref(this.storage, `${user}/images`);
+
 
     const postRef = ref(imagesRef, `posts/${file.name}`);
-    // const imageRef = ref(postRef, file.name)
-    return this.imageUploadService(file, postRef).then((res) => {
-      return getDownloadURL(postRef).then((url) => {
-        console.log(url);
-
-        return url;
+    const promise = new Promise<any>((resolve,reject)=>{
+      this.imageUploadService(file, postRef).then((res) => {
+        getDownloadURL(postRef).then((url) => {
+          console.log(url);
+          resolve (url);
       });
     });
+    })
+    // const imageRef = ref(postRef, file.name)
+    return promise
   }
   getPosts(user: any) {
     const imageRef = this.refService(user);
@@ -123,5 +127,9 @@ export class ImageService {
       });
     });
     return promise;
+  }
+  postDelete(post:any){
+    const desertRef= ref(this.storage,`${post.uid}/images/posts/${post.postName}`)
+    return deleteObject(desertRef)
   }
 }

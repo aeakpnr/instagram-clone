@@ -33,6 +33,7 @@ import { userPosts } from '../classes/user-posts';
 })
 export class DbService {
   db = getDatabase();
+  myData:any
 
   constructor(private database: Database) {}
   userPostDb(postClass: userPosts, username: any) {
@@ -46,6 +47,7 @@ export class DbService {
       url: postClass.url,
       uid: postClass.uid,
       postUid: postClass.postUid,
+      postName:postClass.postName,
       likes: {
         likeCount: 0,
       },
@@ -98,10 +100,10 @@ export class DbService {
   getUserData(uid: string) {
     console.log('user Uid: ', uid);
 
-    const refDb = ref(this.db, `users/`);
+    const refDb = ref(this.db, `users/`+uid);
     let data: object;
     const promise = new Promise<any>((resolve, reject) => {
-      get(child(refDb, uid)).then((res) => {
+      onValue(refDb, (res) => {
         console.log('getUserData Res Value: ', res.val());
 
         data = res.val();
@@ -132,11 +134,11 @@ export class DbService {
     console.log(following);
     const followersRef = ref(
       this.db,
-      'users/' + profileUid + '/followers/' + followers.uName
+      'users/' + profileUid + '/follow/followers/' + followers.uName
     );
     const followingRef = ref(
       this.db,
-      'users/' + user.uid + '/following/' + following.uName
+      'users/' + user.uid + '/follow/following/' + following.uName
     );
     update(followersRef, followers).then((res) => {});
     return update(followingRef, following).then((res) => {
@@ -149,11 +151,11 @@ export class DbService {
     console.log(user.uid);
     const followersRef = ref(
       this.db,
-      'users/' + followingUid + '/followers/' + myUserName
+      'users/' + followingUid + '/follow/followers/' + myUserName
     );
     const followingRef = ref(
       this.db,
-      'users/' + user.uid + '/following/' + username
+      'users/' + user.uid + '/follow/following/' + username
     );
     remove(followersRef).then((res) => {
       console.log(res);
@@ -173,12 +175,14 @@ export class DbService {
       equalTo(username)
     );
     const promise = new Promise<object>((resolve, reject) => {
-      get(recentPostsRef).then((res) => {
-        res.forEach((element) => {
-          posts.push(element.val());
-        });
-      });
-      resolve(posts);
+      onValue(recentPostsRef, (snapshot) => {
+        const data = snapshot.val();
+        console.log(data);
+        this.myData = Object.values(data)
+
+        resolve(data);
+      },{onlyOnce:true});
+
     });
     return promise;
   }
@@ -284,4 +288,19 @@ export class DbService {
     });
     return promise;
   }
+  getMyData(uid:any){
+    const referance = ref(this.db, `users/`+uid);
+    onValue(referance, (snapshot) => {
+      const data = snapshot.val();
+      console.log(data);
+      this.myData = data
+
+      return this.myData
+    });
+  }
+  postDelete(post:any){
+    const referance = ref(this.db,`posts/${post.postUid}`)
+    return remove(referance)
+  }
 }
+
